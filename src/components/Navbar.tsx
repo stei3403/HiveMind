@@ -1,25 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Navbar: React.FC = () => {
   const [theme, setTheme] = useState(() => {
     const storedTheme = localStorage.getItem('theme');
     if (storedTheme) return storedTheme;
-    // If no theme is stored, check system preference
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
       return 'dark';
     }
-    return 'light'; // Default to light if no preference or storage
+    return 'light';
   });
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     const root = window.document.documentElement;
-    if (theme === 'dark') {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
-    }
+    root.classList.toggle('dark', theme === 'dark');
     localStorage.setItem('theme', theme);
   }, [theme]);
 
@@ -42,19 +40,35 @@ const Navbar: React.FC = () => {
         {/* Desktop Nav Links */}
         <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
           <Link to="/browse" className="text-gray-600 dark:text-gray-300 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors">Browse Ideas</Link>
-          <Link to="/#how-it-works" className="text-gray-600 dark:text-gray-300 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors">How it Works</Link> {/* Assuming an ID on LandingPage */}
+          <Link to="/#how-it-works" className="text-gray-600 dark:text-gray-300 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors">How it Works</Link>
           <Link to="/submit" className="text-gray-600 dark:text-gray-300 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors">Submit Idea</Link>
-          <Link to="/#community" className="text-gray-600 dark:text-gray-300 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors">Community</Link> {/* Assuming an ID on LandingPage */}
+          <Link to="/#community" className="text-gray-600 dark:text-gray-300 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors">Community</Link>
         </div>
 
         <div className="flex items-center space-x-3">
-          <Link 
-            to="/submit"
-            className="hidden md:block bg-yellow-400 hover:bg-yellow-500 text-gray-800 font-semibold py-3 px-6 rounded-full transition-colors"
-          >
-            Get Started
-          </Link>
-          
+          {user ? (
+            <>
+              <img
+                src={user.photoURL || 'https://i.pravatar.cc/40'}
+                alt="User Avatar"
+                className="w-10 h-10 rounded-full border border-gray-300 dark:border-gray-600"
+              />
+              <button
+                onClick={logout}
+                className="hidden md:block bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded transition"
+              >
+                Log Out
+              </button>
+            </>
+          ) : (
+            <Link 
+              to="/login"
+              className="hidden md:block bg-yellow-400 hover:bg-yellow-500 text-gray-800 font-semibold py-3 px-6 rounded-full transition-colors"
+            >
+              Get Started
+            </Link>
+          )}
+
           {/* Theme Toggle Button */}
           <button
             onClick={toggleTheme}
@@ -67,7 +81,7 @@ const Navbar: React.FC = () => {
             }
           </button>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Toggle */}
           <div className="md:hidden">
             <button 
               onClick={toggleMobileMenu}
@@ -75,8 +89,8 @@ const Navbar: React.FC = () => {
               aria-label="Toggle mobile menu"
             >
               {isMobileMenuOpen ? 
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg> :
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg> :
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
               }
             </button>
           </div>
@@ -90,13 +104,15 @@ const Navbar: React.FC = () => {
           <Link to="/#how-it-works" className="block py-2 px-3 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800" onClick={toggleMobileMenu}>How it Works</Link>
           <Link to="/submit" className="block py-2 px-3 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800" onClick={toggleMobileMenu}>Submit Idea</Link>
           <Link to="/#community" className="block py-2 px-3 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800" onClick={toggleMobileMenu}>Community</Link>
-          <Link 
-            to="/submit"
-            className="block w-full mt-3 bg-yellow-400 hover:bg-yellow-500 text-gray-800 font-semibold py-3 px-4 rounded-md text-center transition-colors"
-            onClick={toggleMobileMenu}
-          >
-            Get Started
-          </Link>
+          {user ? (
+            <button onClick={() => { logout(); toggleMobileMenu(); }} className="block w-full mt-3 bg-red-500 hover:bg-red-600 text-white font-semibold py-3 px-4 rounded-md text-center transition">
+              Log Out
+            </button>
+          ) : (
+            <Link to="/login" className="block w-full mt-3 bg-yellow-400 hover:bg-yellow-500 text-gray-800 font-semibold py-3 px-4 rounded-md text-center transition-colors" onClick={toggleMobileMenu}>
+              Get Started
+            </Link>
+          )}
         </div>
       )}
     </nav>
