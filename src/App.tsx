@@ -1,13 +1,22 @@
 import React from 'react';
-import LandingPage from './pages/LandingPage';
+import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import LandingPage from './pages/LandingPage';
+import SubmitPage from './components/SubmitPage';
+import BrowsePage from './pages/BrowsePage';
 
 function App() {
   return (
-    <div className='bg-white dark:bg-gray-900 text-gray-900 dark:text-white min-h-screen'>
+    <>
       <Navbar />
-      <LandingPage />
-    </div>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/submit" element={<SubmitPage />} />
+        <Route path="/browse" element={<BrowsePage />} />
+      </Routes>
+      <Footer />
+    </>
   );
 }
 
