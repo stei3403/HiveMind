@@ -6,6 +6,7 @@ import {
   signInWithPopup
 } from 'firebase/auth';
 import { useNavigate, useLocation } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -14,6 +15,7 @@ const LoginPage = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
+  const from = location.state?.from || '/';
   const message = location.state?.message;
 
   const handleEmailAuth = async (e: React.FormEvent) => {
@@ -22,21 +24,26 @@ const LoginPage = () => {
     try {
       if (isNewUser) {
         await createUserWithEmailAndPassword(auth, email, password);
+        toast.success('Account created!');
       } else {
         await signInWithEmailAndPassword(auth, email, password);
+        toast.success('Logged in!');
       }
-      navigate('/');
+      navigate(from);
     } catch (err: any) {
       setError(err.message);
+      toast.error(err.message);
     }
   };
 
   const handleGoogleLogin = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
-      navigate('/');
+      toast.success('Signed in with Google!');
+      navigate(from);
     } catch (err: any) {
       setError(err.message);
+      toast.error(err.message);
     }
   };
 
@@ -73,12 +80,18 @@ const LoginPage = () => {
 
       <div className="my-4 text-sm text-gray-500 text-center">or</div>
 
-      <button
+        <button
         onClick={handleGoogleLogin}
-        className="w-full border border-gray-300 px-4 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
-      >
-        Sign in with Google
-      </button>
+        className="w-full border border-gray-300 px-4 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center justify-center space-x-3"
+        >
+        <img
+            src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+            alt="Google"
+            className="w-5 h-5"
+        />
+        <span>Sign in with Google</span>
+        </button>
+
 
       <div className="mt-4 text-center">
         <button onClick={() => setIsNewUser(!isNewUser)} className="text-blue-600 underline text-sm">
