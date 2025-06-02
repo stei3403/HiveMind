@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
+import { useOpenAISuggestion } from "../hooks/useOpenAISuggestion";
+import { StepProps, IdeaFormData } from '../types/formTypes';
 import Step1_NameIdea from './steps/Step1_NameIdea';
 import Step2_Problem from './steps/Step2_Problem';
 import Step3_Solution from './steps/Step3_Solution';
@@ -21,7 +23,7 @@ const steps = [
   Step3_Solution,
   Step4_Status,
   Step5_ProjectLinks,
-  Step6_AIHelp,
+  //Step6_AIHelp,
   Step7_Industry,
   //Step8_MarketSize,
   Step9_BusinessModel,
@@ -32,9 +34,10 @@ const steps = [
 
 const MultiStepForm: React.FC = () => {
   const [stepIndex, setStepIndex] = useState(0);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState<IdeaFormData>({});
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { generateSuggestion } = useOpenAISuggestion();
 
   useEffect(() => {
     if (user) {
@@ -47,9 +50,47 @@ const MultiStepForm: React.FC = () => {
 
   const StepComponent = steps[stepIndex];
 
-  const handleNext = (data: any) => {
-    setFormData(prev => ({ ...prev, ...data }));
-    setStepIndex(prev => Math.min(prev + 1, steps.length - 1));
+  const handleNext = async (data: any) => {
+    const nextIndex = stepIndex + 1;
+    const updatedFormData = { ...formData, ...data };
+
+    // Trigger AI autofill *after* Step 5 (index 4)
+    if (stepIndex === 4) {
+      toast.loading("Generating AI suggestions...");
+      try {
+        const aiResponse = await generateSuggestion("autofill_all", {
+          name: updatedFormData.name,
+          problem: updatedFormData.problem,
+          solution: updatedFormData.solution,
+          status: updatedFormData.status,
+          links: updatedFormData.links,
+        }) as Partial<IdeaFormData>;
+
+
+        if (aiResponse) {
+          Object.assign(updatedFormData, {
+            industry: aiResponse.industry,
+            businessModel: aiResponse.businessModel,
+            targetAudience: aiResponse.targetAudience,
+            whyNow: aiResponse.whyNow,
+            features: aiResponse.features,
+            tags: aiResponse.tags,
+          });
+          toast.dismiss();
+          toast.success("AI suggestions added!");
+        } else {
+          toast.dismiss();
+          toast.error("AI response was empty.");
+        }
+      } catch (err) {
+        toast.dismiss();
+        toast.error("AI autofill failed.");
+        console.error(err);
+      }
+    }
+
+    setFormData(updatedFormData);
+    setStepIndex(Math.min(nextIndex, steps.length - 1));
   };
 
   const handleBack = () => {
@@ -58,9 +99,9 @@ const MultiStepForm: React.FC = () => {
 
   const handleSubmit = () => {
     toast.success('🎉 Idea submitted!');
-    setFormData({}); // clear data
-    setStepIndex(0); // reset to first step
-    navigate('/thanks'); // go to thank-you page
+    setFormData({});
+    setStepIndex(0);
+    navigate('/thanks');
   };
 
   return (

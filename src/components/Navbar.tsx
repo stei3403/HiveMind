@@ -84,12 +84,6 @@ const Navbar: React.FC = () => {
                       </Link>
                     )}
         <div className="flex items-center space-x-3">
-          {!user && (
-            <Link to="/login" className="hidden md:block bg-yellow-400 hover:bg-yellow-500 text-gray-800 font-semibold py-3 px-6 rounded-full transition-colors">
-              Get Started
-            </Link>
-          )}
-
           <button
             onClick={toggleTheme}
             className="text-gray-600 dark:text-gray-300 hover:text-yellow-500 dark:hover:text-yellow-400 p-2 rounded-full transition-colors focus:outline-none"

@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
-
-interface StepProps {
-  data: any;
-  onNext: (data: any) => void;
-  onBack: () => void;
-  onSubmit?: () => void;
-  isLastStep?: boolean;
-}
+import { StepProps } from '../../types/formTypes';
 
 const INDUSTRY_OPTIONS = [
   'Finance',
@@ -26,7 +19,7 @@ const INDUSTRY_OPTIONS = [
 ];
 
 const Step7_Industry: React.FC<StepProps> = ({ data, onNext, onBack }) => {
-  const [selectedTags, setSelectedTags] = useState<string[]>(data.Step7_Industry || []);
+  const [selectedTags, setSelectedTags] = useState<string[]>(data.industry || []);
 
   const toggleTag = (tag: string) => {
     setSelectedTags(prev =>
@@ -35,13 +28,17 @@ const Step7_Industry: React.FC<StepProps> = ({ data, onNext, onBack }) => {
   };
 
   const handleContinue = () => {
-    onNext({ Step7_Industry: selectedTags });
+    onNext({ industry: selectedTags });
   };
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">Select Relevant Industries</h2>
-      <p className="text-gray-500 dark:text-gray-300">Pick one or more industries that apply to your idea.</p>
+      <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">
+        Select Relevant Industries
+      </h2>
+      <p className="text-gray-500 dark:text-gray-300">
+        Pick one or more industries that apply to your idea.
+      </p>
 
       <div className="flex flex-wrap gap-2">
         {INDUSTRY_OPTIONS.map((tag) => (
@@ -60,7 +57,9 @@ const Step7_Industry: React.FC<StepProps> = ({ data, onNext, onBack }) => {
       </div>
 
       <div className="flex justify-between pt-6">
-        <button onClick={onBack} className="text-gray-600 dark:text-gray-300">Back</button>
+        <button onClick={onBack} className="text-gray-600 dark:text-gray-300">
+          Back
+        </button>
         <button
           onClick={handleContinue}
           className="bg-yellow-400 hover:bg-yellow-500 text-white font-semibold px-6 py-2 rounded-full shadow"
