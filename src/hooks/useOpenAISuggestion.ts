@@ -1,5 +1,3 @@
-import { functions } from "../firebase";
-import { getFunctions, httpsCallable } from "firebase/functions";
 import { useState } from "react";
 
 export function useOpenAISuggestion() {
@@ -9,14 +7,29 @@ export function useOpenAISuggestion() {
   const generateSuggestion = async (stepName: string, ideaData: any) => {
     setLoading(true);
     setError(null);
+
     try {
-      const functions = getFunctions();
-      const autofill = httpsCallable(functions, "openaiAutofill");
-      const result = await autofill({ stepName, ideaData });
-      return result.data;
+      const response = await fetch(
+        "https://us-central1-hivemindapp-f1ac8.cloudfunctions.net/openaiAutofill",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ stepName, ideaData }),
+        }
+      );
+
+      if (!response.ok) {
+        const { error } = await response.json().catch(() => ({ error: "Unknown error" }));
+        throw new Error(error || "Request failed");
+      }
+
+      const { content } = await response.json();
+      return content;
     } catch (err: any) {
-      setError(err.message);
       console.error("Error calling OpenAI function:", err);
+      setError(err.message || "Unknown error");
       return null;
     } finally {
       setLoading(false);

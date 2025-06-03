@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useOpenAISuggestion } from '../../hooks/useOpenAISuggestion';
 
 interface StepProps {
   data: any;
@@ -8,24 +9,44 @@ interface StepProps {
   isLastStep?: boolean;
 }
 
-const Step10_Team: React.FC<StepProps> = ({ data, onNext, onBack, onSubmit, isLastStep }) => {
-  const [input, setInput] = useState(data['Step10_Team'] || '');
+const FIELD_NAME = 'team';
+
+const Step10_Team: React.FC<StepProps> = ({ data, onNext, onBack }) => {
+  const [team, setTeam] = useState(data[FIELD_NAME] || '');
+  const { generateSuggestion, loading } = useOpenAISuggestion();
+
+  useEffect(() => {
+    const fetchSuggestion = async () => {
+      if (!team) {
+        const suggestion = await generateSuggestion(FIELD_NAME, data);
+        if (suggestion) setTeam(suggestion);
+      }
+    };
+    fetchSuggestion();
+  }, []);
 
   const handleContinue = () => {
-    onNext({ 'Step10_Team': input });
+    onNext({ [FIELD_NAME]: team });
   };
 
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">Team Composition</h2>
+      <p className="text-gray-500 dark:text-gray-300">
+        Describe the key roles needed to launch and operate this idea. 
+        For example: founder, developer, designer, marketer, etc.
+      </p>
       <textarea
         className="w-full p-4 border rounded-md dark:bg-gray-800 dark:text-white"
         rows={4}
-        placeholder="Estimate team roles/size"
-        value={input}
-        onChange={e => setInput(e.target.value)}
+        placeholder="e.g., 1 founder, 1 frontend developer, 1 backend developer, 1 marketing lead"
+        value={team}
+        onChange={e => setTeam(e.target.value)}
       />
-      <div className="flex justify-between">
+      {loading && (
+        <p className="text-sm text-gray-400">✨ Generating AI suggestion...</p>
+      )}
+      <div className="flex justify-between pt-6">
         <button onClick={onBack} className="text-gray-600 dark:text-gray-300">Back</button>
         <button
           onClick={handleContinue}

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useOpenAISuggestion } from '../../hooks/useOpenAISuggestion';
 
 interface StepProps {
   data: any;
@@ -8,25 +9,46 @@ interface StepProps {
   isLastStep?: boolean;
 }
 
-const Step9_BusinessModel: React.FC<StepProps> = ({ data, onNext, onBack, onSubmit, isLastStep }) => {
-  const [input, setInput] = useState(data['Step9_BusinessModel'] || '');
+const FIELD_NAME = 'businessModel';
+
+const Step9_BusinessModel: React.FC<StepProps> = ({ data, onNext, onBack }) => {
+  const [businessModel, setBusinessModel] = useState(data[FIELD_NAME] || '');
+  const { generateSuggestion, loading } = useOpenAISuggestion();
+
+  useEffect(() => {
+    const fetchSuggestion = async () => {
+      const suggestion = await generateSuggestion(FIELD_NAME, data);
+      if (suggestion && !businessModel) {
+        setBusinessModel(suggestion);
+      }
+    };
+    fetchSuggestion();
+  }, []);
 
   const handleContinue = () => {
-    onNext({ 'Step9_BusinessModel': input });
+    onNext({ [FIELD_NAME]: businessModel });
   };
 
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">Business Model</h2>
+      <p className="text-gray-500 dark:text-gray-300">
+        Briefly describe how your idea will generate revenue.
+      </p>
       <textarea
         className="w-full p-4 border rounded-md dark:bg-gray-800 dark:text-white"
         rows={4}
-        placeholder="How will it make money?"
-        value={input}
-        onChange={e => setInput(e.target.value)}
+        placeholder="e.g., Subscription fees, affiliate marketing, in-app purchases, licensing, etc."
+        value={businessModel}
+        onChange={e => setBusinessModel(e.target.value)}
       />
-      <div className="flex justify-between">
-        <button onClick={onBack} className="text-gray-600 dark:text-gray-300">Back</button>
+      {loading && (
+        <p className="text-sm text-gray-400">✨ Generating AI suggestion...</p>
+      )}
+      <div className="flex justify-between pt-6">
+        <button onClick={onBack} className="text-gray-600 dark:text-gray-300">
+          Back
+        </button>
         <button
           onClick={handleContinue}
           className="bg-yellow-400 hover:bg-yellow-500 text-white font-semibold px-6 py-2 rounded-full shadow"

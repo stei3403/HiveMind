@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useOpenAISuggestion } from '../../hooks/useOpenAISuggestion';
 
 interface StepProps {
   data: any;
@@ -14,13 +15,32 @@ const categorizedTags = {
   Features: ['No-Code', 'Blockchain', 'Voice UI', 'Chatbot', 'Recommendation Engine', 'Crowdsourced', 'Real-time', 'Gamified', 'Mobile-first', 'API']
 };
 
+const FIELD_NAME = 'Step11_Tags';
+
 const Step11_Tags: React.FC<StepProps> = ({ data, onNext, onBack }) => {
-  const initialTags = Array.isArray(data.Step11_Tags) ? data.Step11_Tags : [];
+  const initialTags = Array.isArray(data[FIELD_NAME]) ? data[FIELD_NAME] : [];
   const [selectedTags, setSelectedTags] = useState<string[]>(initialTags);
   const [searchInput, setSearchInput] = useState('');
   const [error, setError] = useState('');
+  const { generateSuggestion, loading } = useOpenAISuggestion();
 
   const allTags = Object.values(categorizedTags).flat();
+
+  // Fetch AI suggestion on first load if no tags are selected
+  useEffect(() => {
+    const fetchSuggestion = async () => {
+      if (selectedTags.length === 0) {
+        const suggestion = await generateSuggestion(FIELD_NAME, data);
+        if (Array.isArray(suggestion)) {
+          setSelectedTags(suggestion.slice(0, 5));
+        } else if (typeof suggestion === 'string') {
+          const tags = suggestion.split(',').map(tag => tag.trim()).slice(0, 5);
+          setSelectedTags(tags);
+        }
+      }
+    };
+    fetchSuggestion();
+  }, []);
 
   const handleTagToggle = (tag: string) => {
     if (selectedTags.includes(tag)) {
@@ -48,7 +68,7 @@ const Step11_Tags: React.FC<StepProps> = ({ data, onNext, onBack }) => {
   };
 
   const handleContinue = () => {
-    onNext({ Step11_Tags: selectedTags });
+    onNext({ [FIELD_NAME]: selectedTags });
   };
 
   const filteredTags = allTags.filter(tag =>
@@ -60,7 +80,6 @@ const Step11_Tags: React.FC<StepProps> = ({ data, onNext, onBack }) => {
       <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">Add Tags</h2>
       <p className="text-gray-600 dark:text-gray-300">Select up to 5 tags that best describe your idea.</p>
 
-      {/* Search + Add Custom */}
       <div className="flex gap-2">
         <input
           type="text"
@@ -78,10 +97,9 @@ const Step11_Tags: React.FC<StepProps> = ({ data, onNext, onBack }) => {
         </button>
       </div>
 
-      {/* Error */}
       {error && <p className="text-red-500 text-sm">{error}</p>}
+      {loading && <p className="text-sm text-gray-400">✨ Generating AI suggestion...</p>}
 
-      {/* Selected */}
       <div className="flex flex-wrap gap-2">
         {selectedTags.map(tag => (
           <span
@@ -94,7 +112,6 @@ const Step11_Tags: React.FC<StepProps> = ({ data, onNext, onBack }) => {
         ))}
       </div>
 
-      {/* Tag categories */}
       {Object.entries(categorizedTags).map(([category, tags]) => (
         <div key={category}>
           <h4 className="text-sm font-semibold text-gray-500 mt-4 mb-2 dark:text-gray-300">{category}</h4>
@@ -116,7 +133,6 @@ const Step11_Tags: React.FC<StepProps> = ({ data, onNext, onBack }) => {
         </div>
       ))}
 
-      {/* Navigation */}
       <div className="flex justify-between pt-6">
         <button onClick={onBack} className="text-gray-600 dark:text-gray-300">Back</button>
         <button

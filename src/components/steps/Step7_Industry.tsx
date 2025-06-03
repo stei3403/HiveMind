@@ -1,25 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StepProps } from '../../types/formTypes';
+import { useOpenAISuggestion } from '../../hooks/useOpenAISuggestion';
 
 const INDUSTRY_OPTIONS = [
-  'Finance',
-  'Healthcare',
-  'Education',
-  'E-commerce',
-  'Entertainment',
-  'Real Estate',
-  'Transportation',
-  'Travel',
-  'SaaS',
-  'Marketing',
-  'Retail',
-  'AI / Machine Learning',
-  'Developer Tools',
-  'Social Impact',
+  'Finance', 'Healthcare', 'Education', 'E-commerce', 'Entertainment',
+  'Real Estate', 'Transportation', 'Travel', 'SaaS', 'Marketing',
+  'Retail', 'AI / Machine Learning', 'Developer Tools', 'Social Impact',
 ];
 
 const Step7_Industry: React.FC<StepProps> = ({ data, onNext, onBack }) => {
   const [selectedTags, setSelectedTags] = useState<string[]>(data.industry || []);
+  const { generateSuggestion, loading, error } = useOpenAISuggestion();
+
+  useEffect(() => {
+    const fetchSuggestion = async () => {
+      if (!data.industry || data.industry.length === 0) {
+        const suggestion = await generateSuggestion("industry", data);
+        if (suggestion) {
+          const matchedTags = INDUSTRY_OPTIONS.filter(option =>
+            suggestion.toLowerCase().includes(option.toLowerCase())
+          );
+          setSelectedTags(matchedTags);
+        }
+      }
+    };
+    fetchSuggestion();
+  }, []);
 
   const toggleTag = (tag: string) => {
     setSelectedTags(prev =>
@@ -39,6 +45,9 @@ const Step7_Industry: React.FC<StepProps> = ({ data, onNext, onBack }) => {
       <p className="text-gray-500 dark:text-gray-300">
         Pick one or more industries that apply to your idea.
       </p>
+
+      {loading && <p className="text-sm text-gray-400">Generating AI suggestion...</p>}
+      {error && <p className="text-sm text-red-500">AI Error: {error}</p>}
 
       <div className="flex flex-wrap gap-2">
         {INDUSTRY_OPTIONS.map((tag) => (
