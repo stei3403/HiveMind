@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useOpenAISuggestion } from '../../hooks/useOpenAISuggestion';
 
 interface StepProps {
@@ -9,33 +9,24 @@ interface StepProps {
   isLastStep?: boolean;
 }
 
-const Step8_MarketSize: React.FC<StepProps> = ({ data, onNext, onBack, onSubmit, isLastStep }) => {
-  const [input, setInput] = useState(data['Step8_MarketSize'] || '');
+const marketSize: React.FC<StepProps> = ({ data, onNext, onBack, onSubmit, isLastStep }) => {
+  const [input, setInput] = useState(data['marketSize'] || '');
   const { generateSuggestion, loading, error } = useOpenAISuggestion();
 
-  useEffect(() => {
-    const fetchSuggestion = async () => {
-      if (!data['Step8_MarketSize']) {
-        const suggestion = await generateSuggestion('Step8_MarketSize', data);
-        if (suggestion) {
-          setInput(suggestion);
-        }
-      }
-    };
-
-    fetchSuggestion();
-  }, []);
+  const handleAISuggestion = async () => {
+    const suggestion = await generateSuggestion('marketSize', data);
+    if (suggestion) {
+      setInput(suggestion);
+    }
+  };
 
   const handleContinue = () => {
-    onNext({ 'Step8_MarketSize': input });
+    onNext({ 'marketSize': input });
   };
 
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">Market Size</h2>
-
-      {loading && <p className="text-sm text-gray-400">Generating AI suggestion...</p>}
-      {error && <p className="text-sm text-red-500">AI Error: {error}</p>}
 
       <textarea
         className="w-full p-4 border rounded-md dark:bg-gray-800 dark:text-white"
@@ -44,6 +35,16 @@ const Step8_MarketSize: React.FC<StepProps> = ({ data, onNext, onBack, onSubmit,
         value={input}
         onChange={e => setInput(e.target.value)}
       />
+
+      <button
+        onClick={handleAISuggestion}
+        className="text-sm text-blue-600 underline"
+        disabled={loading}
+      >
+        {loading ? 'Generating suggestion...' : 'Get AI Suggestion'}
+      </button>
+
+      {error && <p className="text-sm text-red-500">AI Error: {error}</p>}
 
       <div className="flex justify-between">
         <button onClick={onBack} className="text-gray-600 dark:text-gray-300">
@@ -60,4 +61,4 @@ const Step8_MarketSize: React.FC<StepProps> = ({ data, onNext, onBack, onSubmit,
   );
 };
 
-export default Step8_MarketSize;
+export default marketSize;

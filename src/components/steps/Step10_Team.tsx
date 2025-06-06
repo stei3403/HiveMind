@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useOpenAISuggestion } from '../../hooks/useOpenAISuggestion';
 
 interface StepProps {
@@ -11,19 +11,14 @@ interface StepProps {
 
 const FIELD_NAME = 'team';
 
-const Step10_Team: React.FC<StepProps> = ({ data, onNext, onBack }) => {
+const team: React.FC<StepProps> = ({ data, onNext, onBack }) => {
   const [team, setTeam] = useState(data[FIELD_NAME] || '');
-  const { generateSuggestion, loading } = useOpenAISuggestion();
+  const { generateSuggestion, loading, error } = useOpenAISuggestion();
 
-  useEffect(() => {
-    const fetchSuggestion = async () => {
-      if (!team) {
-        const suggestion = await generateSuggestion(FIELD_NAME, data);
-        if (suggestion) setTeam(suggestion);
-      }
-    };
-    fetchSuggestion();
-  }, []);
+  const handleAISuggestion = async () => {
+    const suggestion = await generateSuggestion(FIELD_NAME, data);
+    if (suggestion) setTeam(suggestion);
+  };
 
   const handleContinue = () => {
     onNext({ [FIELD_NAME]: team });
@@ -36,6 +31,7 @@ const Step10_Team: React.FC<StepProps> = ({ data, onNext, onBack }) => {
         Describe the key roles needed to launch and operate this idea. 
         For example: founder, developer, designer, marketer, etc.
       </p>
+      
       <textarea
         className="w-full p-4 border rounded-md dark:bg-gray-800 dark:text-white"
         rows={4}
@@ -43,9 +39,17 @@ const Step10_Team: React.FC<StepProps> = ({ data, onNext, onBack }) => {
         value={team}
         onChange={e => setTeam(e.target.value)}
       />
-      {loading && (
-        <p className="text-sm text-gray-400">✨ Generating AI suggestion...</p>
-      )}
+
+      <button
+        onClick={handleAISuggestion}
+        className="text-sm text-blue-600 underline"
+        disabled={loading}
+      >
+        {loading ? 'Generating suggestion...' : 'Get AI Suggestion'}
+      </button>
+
+      {error && <p className="text-sm text-red-500">AI Error: {error}</p>}
+
       <div className="flex justify-between pt-6">
         <button onClick={onBack} className="text-gray-600 dark:text-gray-300">Back</button>
         <button
@@ -59,4 +63,4 @@ const Step10_Team: React.FC<StepProps> = ({ data, onNext, onBack }) => {
   );
 };
 
-export default Step10_Team;
+export default team;

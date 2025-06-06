@@ -16,12 +16,12 @@ const statusOptions = [
   'Iterating and Improving',
 ];
 
-const Step4_Status: React.FC<StepProps> = ({ data, onNext, onBack }) => {
-  const initialIndex = statusOptions.indexOf(data.Step4_Status) || 0;
+const status: React.FC<StepProps> = ({ data, onNext, onBack }) => {
+  const initialIndex = statusOptions.indexOf(data.status) || 0;
   const [sliderValue, setSliderValue] = useState(initialIndex);
 
   const handleContinue = () => {
-    onNext({ Step4_Status: statusOptions[sliderValue] });
+    onNext({ status: statusOptions[sliderValue] });
   };
 
   return (
@@ -65,4 +65,4 @@ const Step4_Status: React.FC<StepProps> = ({ data, onNext, onBack }) => {
   );
 };
 
-export default Step4_Status;
+export default status;

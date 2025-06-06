@@ -13,8 +13,8 @@ interface LinkItem {
   url: string;
 }
 
-const Step5_ProjectLinks: React.FC<StepProps> = ({ data, onNext, onBack }) => {
-  const [links, setLinks] = useState<LinkItem[]>(data.Step5_ProjectLinks || []);
+const links: React.FC<StepProps> = ({ data, onNext, onBack }) => {
+  const [links, setLinks] = useState<LinkItem[]>(data.links || []);
 
   const handleAddLink = (type: string) => {
     const url = prompt(`Paste your ${type} link:`);
@@ -31,14 +31,14 @@ const Step5_ProjectLinks: React.FC<StepProps> = ({ data, onNext, onBack }) => {
   };
 
   const handleContinue = () => {
-    onNext({ Step5_ProjectLinks: links });
+    onNext({ links: links });
   };
 
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <button onClick={onBack} className="text-gray-600 dark:text-gray-300 text-2xl">←</button>
-        <button onClick={() => onNext({ Step5_ProjectLinks: [] })} className="text-yellow-500 font-semibold">Skip</button>
+        <button onClick={() => onNext({ links: [] })} className="text-yellow-500 font-semibold">Skip</button>
       </div>
 
       <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Add project links</h2>
@@ -100,4 +100,4 @@ const Step5_ProjectLinks: React.FC<StepProps> = ({ data, onNext, onBack }) => {
   );
 };
 
-export default Step5_ProjectLinks;
+export default links;

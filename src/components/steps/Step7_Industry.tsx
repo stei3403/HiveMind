@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { StepProps } from '../../types/formTypes';
 import { useOpenAISuggestion } from '../../hooks/useOpenAISuggestion';
 
@@ -8,29 +8,24 @@ const INDUSTRY_OPTIONS = [
   'Retail', 'AI / Machine Learning', 'Developer Tools', 'Social Impact',
 ];
 
-const Step7_Industry: React.FC<StepProps> = ({ data, onNext, onBack }) => {
+const industry: React.FC<StepProps> = ({ data, onNext, onBack }) => {
   const [selectedTags, setSelectedTags] = useState<string[]>(data.industry || []);
   const { generateSuggestion, loading, error } = useOpenAISuggestion();
-
-  useEffect(() => {
-    const fetchSuggestion = async () => {
-      if (!data.industry || data.industry.length === 0) {
-        const suggestion = await generateSuggestion("industry", data);
-        if (suggestion) {
-          const matchedTags = INDUSTRY_OPTIONS.filter(option =>
-            suggestion.toLowerCase().includes(option.toLowerCase())
-          );
-          setSelectedTags(matchedTags);
-        }
-      }
-    };
-    fetchSuggestion();
-  }, []);
 
   const toggleTag = (tag: string) => {
     setSelectedTags(prev =>
       prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]
     );
+  };
+
+  const handleAISuggestion = async () => {
+    const suggestion = await generateSuggestion("industry", data);
+    if (suggestion) {
+      const matchedTags = INDUSTRY_OPTIONS.filter(option =>
+        suggestion.toLowerCase().includes(option.toLowerCase())
+      );
+      setSelectedTags(matchedTags);
+    }
   };
 
   const handleContinue = () => {
@@ -48,6 +43,14 @@ const Step7_Industry: React.FC<StepProps> = ({ data, onNext, onBack }) => {
 
       {loading && <p className="text-sm text-gray-400">Generating AI suggestion...</p>}
       {error && <p className="text-sm text-red-500">AI Error: {error}</p>}
+
+      <button
+        onClick={handleAISuggestion}
+        className="text-sm underline text-blue-500 hover:text-blue-600"
+        disabled={loading}
+      >
+        {loading ? 'Loading...' : 'Get AI Suggestion'}
+      </button>
 
       <div className="flex flex-wrap gap-2">
         {INDUSTRY_OPTIONS.map((tag) => (
@@ -80,4 +83,4 @@ const Step7_Industry: React.FC<StepProps> = ({ data, onNext, onBack }) => {
   );
 };
 
-export default Step7_Industry;
+export default industry;

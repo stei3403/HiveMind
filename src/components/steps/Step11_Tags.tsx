@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useOpenAISuggestion } from '../../hooks/useOpenAISuggestion';
 
 interface StepProps {
@@ -15,32 +15,26 @@ const categorizedTags = {
   Features: ['No-Code', 'Blockchain', 'Voice UI', 'Chatbot', 'Recommendation Engine', 'Crowdsourced', 'Real-time', 'Gamified', 'Mobile-first', 'API']
 };
 
-const FIELD_NAME = 'Step11_Tags';
+const FIELD_NAME = 'tags';
 
-const Step11_Tags: React.FC<StepProps> = ({ data, onNext, onBack }) => {
+const tags: React.FC<StepProps> = ({ data, onNext, onBack }) => {
   const initialTags = Array.isArray(data[FIELD_NAME]) ? data[FIELD_NAME] : [];
   const [selectedTags, setSelectedTags] = useState<string[]>(initialTags);
   const [searchInput, setSearchInput] = useState('');
   const [error, setError] = useState('');
-  const { generateSuggestion, loading } = useOpenAISuggestion();
+  const { generateSuggestion, loading, error: aiError } = useOpenAISuggestion();
 
   const allTags = Object.values(categorizedTags).flat();
 
-  // Fetch AI suggestion on first load if no tags are selected
-  useEffect(() => {
-    const fetchSuggestion = async () => {
-      if (selectedTags.length === 0) {
-        const suggestion = await generateSuggestion(FIELD_NAME, data);
-        if (Array.isArray(suggestion)) {
-          setSelectedTags(suggestion.slice(0, 5));
-        } else if (typeof suggestion === 'string') {
-          const tags = suggestion.split(',').map(tag => tag.trim()).slice(0, 5);
-          setSelectedTags(tags);
-        }
-      }
-    };
-    fetchSuggestion();
-  }, []);
+  const handleAISuggestion = async () => {
+    const suggestion = await generateSuggestion(FIELD_NAME, data);
+    if (Array.isArray(suggestion)) {
+      setSelectedTags(suggestion.slice(0, 5));
+    } else if (typeof suggestion === 'string') {
+      const tags = suggestion.split(',').map(tag => tag.trim()).slice(0, 5);
+      setSelectedTags(tags);
+    }
+  };
 
   const handleTagToggle = (tag: string) => {
     if (selectedTags.includes(tag)) {
@@ -97,8 +91,16 @@ const Step11_Tags: React.FC<StepProps> = ({ data, onNext, onBack }) => {
         </button>
       </div>
 
+      <button
+        onClick={handleAISuggestion}
+        className="text-sm text-blue-600 underline"
+        disabled={loading}
+      >
+        {loading ? 'Generating suggestion...' : 'Get AI Suggestion'}
+      </button>
+
       {error && <p className="text-red-500 text-sm">{error}</p>}
-      {loading && <p className="text-sm text-gray-400">✨ Generating AI suggestion...</p>}
+      {aiError && <p className="text-sm text-red-500">AI Error: {aiError}</p>}
 
       <div className="flex flex-wrap gap-2">
         {selectedTags.map(tag => (
@@ -146,4 +148,4 @@ const Step11_Tags: React.FC<StepProps> = ({ data, onNext, onBack }) => {
   );
 };
 
-export default Step11_Tags;
+export default tags;

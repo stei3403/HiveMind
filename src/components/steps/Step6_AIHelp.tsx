@@ -16,7 +16,13 @@ const Step6_AIHelp: React.FC<StepProps> = ({ onNext, onBack }) => {
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">Let AI Help?</h2>
-      <p className="text-gray-500 dark:text-gray-300">Would you like AI to enhance your idea with additional suggestions or formatting?</p>
+      <p className="text-gray-500 dark:text-gray-300">Would you like AI to help fill out the rest?</p>
+      <p className="text-gray-500 dark:text-gray-300">✨ Industry</p>
+      <p className="text-gray-500 dark:text-gray-300">✨ Market Size</p>
+      <p className="text-gray-500 dark:text-gray-300">✨ Business Model</p>
+      <p className="text-gray-500 dark:text-gray-300">✨ Team</p>
+      <p className="text-gray-500 dark:text-gray-300">✨ Tags</p>
+      <p className="text-gray-500 dark:text-gray-300">(You can review and make changes prior to submitting)</p>
 
       <div className="space-y-4">
         <button

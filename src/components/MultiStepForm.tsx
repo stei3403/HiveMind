@@ -23,9 +23,9 @@ const steps = [
   Step3_Solution,
   Step4_Status,
   Step5_ProjectLinks,
-  //Step6_AIHelp,
+  Step6_AIHelp,
   Step7_Industry,
-  //Step8_MarketSize,
+  Step8_MarketSize,
   Step9_BusinessModel,
   Step10_Team,
   Step11_Tags,
@@ -51,46 +51,17 @@ const MultiStepForm: React.FC = () => {
   const StepComponent = steps[stepIndex];
 
   const handleNext = async (data: any) => {
-    const nextIndex = stepIndex + 1;
     const updatedFormData = { ...formData, ...data };
 
-    // Trigger AI autofill *after* Step 5 (index 4)
-    if (stepIndex === 4) {
-      toast.loading("Generating AI suggestions...");
-      try {
-        const aiResponse = await generateSuggestion("autofill_all", {
-          name: updatedFormData.name,
-          problem: updatedFormData.problem,
-          solution: updatedFormData.solution,
-          status: updatedFormData.status,
-          links: updatedFormData.links,
-        }) as Partial<IdeaFormData>;
-
-
-        if (aiResponse) {
-          Object.assign(updatedFormData, {
-            industry: aiResponse.industry,
-            businessModel: aiResponse.businessModel,
-            targetAudience: aiResponse.targetAudience,
-            whyNow: aiResponse.whyNow,
-            features: aiResponse.features,
-            tags: aiResponse.tags,
-          });
-          toast.dismiss();
-          toast.success("AI suggestions added!");
-        } else {
-          toast.dismiss();
-          toast.error("AI response was empty.");
-        }
-      } catch (err) {
-        toast.dismiss();
-        toast.error("AI autofill failed.");
-        console.error(err);
-      }
+    // If user accepted AI help, go straight to review
+    if (stepIndex === 5 && data.aiHelpAccepted === true) {
+      setFormData(updatedFormData);
+      setStepIndex(steps.length - 1); // Jump to Step12_Review
+      return;
     }
 
     setFormData(updatedFormData);
-    setStepIndex(Math.min(nextIndex, steps.length - 1));
+    setStepIndex(prev => Math.min(prev + 1, steps.length - 1));
   };
 
   const handleBack = () => {

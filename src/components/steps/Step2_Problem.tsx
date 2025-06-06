@@ -8,11 +8,11 @@ interface StepProps {
   isLastStep?: boolean;
 }
 
-const Step2_Problem: React.FC<StepProps> = ({ data, onNext, onBack, onSubmit, isLastStep }) => {
-  const [input, setInput] = useState(data['Step2_Problem'] || '');
+const problem: React.FC<StepProps> = ({ data, onNext, onBack, onSubmit, isLastStep }) => {
+  const [input, setInput] = useState(data['problem'] || '');
 
   const handleContinue = () => {
-    onNext({ 'Step2_Problem': input });
+    onNext({ 'problem': input });
   };
 
   return (
@@ -38,4 +38,4 @@ const Step2_Problem: React.FC<StepProps> = ({ data, onNext, onBack, onSubmit, is
   );
 };
 
-export default Step2_Problem;
+export default problem;

@@ -8,9 +8,11 @@ export function useOpenAISuggestion() {
     setLoading(true);
     setError(null);
 
+    const debug = import.meta.env.MODE === "development";
+
     try {
       const response = await fetch(
-        "https://us-central1-hivemindapp-f1ac8.cloudfunctions.net/openaiAutofill",
+        `https://us-central1-hivemindapp-f1ac8.cloudfunctions.net/openaiAutofill${debug ? "?debug=true" : ""}`,
         {
           method: "POST",
           headers: {
@@ -20,13 +22,16 @@ export function useOpenAISuggestion() {
         }
       );
 
-      if (!response.ok) {
-        const { error } = await response.json().catch(() => ({ error: "Unknown error" }));
-        throw new Error(error || "Request failed");
+      const result = await response.json();
+
+      // Safely log everything for debugging
+      if (debug) {
+        console.log("📦 Full response JSON:", result);
+        console.log("🧠 Prompt sent to OpenAI:", result.debugPrompt || "⚠️ No debugPrompt returned");
+        console.log("📝 AI response:", result.debugResponse || "⚠️ No debugResponse returned");
       }
 
-      const { content } = await response.json();
-      return content;
+      return result.content;
     } catch (err: any) {
       console.error("Error calling OpenAI function:", err);
       setError(err.message || "Unknown error");
