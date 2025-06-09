@@ -11,7 +11,7 @@ import Step4_Status from './steps/Step4_Status';
 import Step5_ProjectLinks from './steps/Step5_ProjectLinks';
 import Step6_AIHelp from './steps/Step6_AIHelp';
 import Step7_Industry from './steps/Step7_Industry';
-import Step8_MarketSize from './steps/Step8_MarketSize';
+//import Step8_MarketSize from './steps/Step8_MarketSize';
 import Step9_BusinessModel from './steps/Step9_BusinessModel';
 import Step10_Team from './steps/Step10_Team';
 import Step11_Tags from './steps/Step11_Tags';
@@ -25,7 +25,7 @@ const steps = [
   Step5_ProjectLinks,
   Step6_AIHelp,
   Step7_Industry,
-  Step8_MarketSize,
+  //Step8_MarketSize,
   Step9_BusinessModel,
   Step10_Team,
   Step11_Tags,

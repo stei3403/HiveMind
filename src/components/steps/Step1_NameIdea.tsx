@@ -20,7 +20,7 @@ const name: React.FC<StepProps> = ({ data, onNext, onBack }) => {
       <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">Name your idea</h2>
       <textarea
         className="w-full p-4 border rounded-md dark:bg-gray-800 dark:text-white"
-        rows={2}
+        rows={1}
         placeholder="Enter your idea name..."
         value={input}
         onChange={e => setInput(e.target.value)}

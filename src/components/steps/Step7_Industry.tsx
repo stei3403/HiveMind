@@ -3,13 +3,58 @@ import { StepProps } from '../../types/formTypes';
 import { useOpenAISuggestion } from '../../hooks/useOpenAISuggestion';
 
 const INDUSTRY_OPTIONS = [
-  'Finance', 'Healthcare', 'Education', 'E-commerce', 'Entertainment',
-  'Real Estate', 'Transportation', 'Travel', 'SaaS', 'Marketing',
-  'Retail', 'AI / Machine Learning', 'Developer Tools', 'Social Impact',
+  'AI / Machine Learning',
+  'SaaS',
+  'E-commerce',
+  'Healthcare',
+  'Finance',
+  'Education',
+  'Real Estate',
+  'Marketing',
+  'Developer Tools',
+  'Cybersecurity',
+  'Entertainment',
+  'Transportation',
+  'Retail',
+  'Social Impact',
+  'Web3 / Blockchain',
+  'Gaming',
+  'Climate / Sustainability',
+  'Clean Energy',
+  'Insurance / Insurtech',
+  'Legal / Legaltech',
+  'Marketplace Platforms',
+  'Agriculture / AgTech',
+  'Food & Beverage',
+  'Supply Chain / Logistics',
+  'HR / Recruiting',
+  'AR / VR / Spatial Computing',
+  'Real-time Collaboration Tools',
+  'Fitness / Wellness',
+  'Mental Health',
+  'Creator Economy',
+  'Open Source Tools',
+  'IoT / Connected Devices',
+  'Aerospace / Drones',
+  'Manufacturing / Robotics',
+  'Mobility / EVs',
+  'Telecommunications',
+  'Data & Analytics',
+  'GovTech / Civic Tech',
+  'Media / Publishing',
+  'Fashion / Apparel',
+  'Pet Tech',
+  'Elder Care / Aging Tech',
+  'Nonprofit / Philanthropy',
+  'Parenting / Childcare',
+  'Construction / PropTech',
+  'Finance - DeFi / Crypto',
+  'Healthcare - Biotech / Medtech',
 ];
 
-const industry: React.FC<StepProps> = ({ data, onNext, onBack }) => {
+const Step8_Industry: React.FC<StepProps> = ({ data, onNext, onBack }) => {
   const [selectedTags, setSelectedTags] = useState<string[]>(data.industry || []);
+  const [showAll, setShowAll] = useState(false);
   const { generateSuggestion, loading, error } = useOpenAISuggestion();
 
   const toggleTag = (tag: string) => {
@@ -32,6 +77,8 @@ const industry: React.FC<StepProps> = ({ data, onNext, onBack }) => {
     onNext({ industry: selectedTags });
   };
 
+  const displayedTags = showAll ? INDUSTRY_OPTIONS : INDUSTRY_OPTIONS.slice(0, 14); // top 14 are common ones
+
   return (
     <div className="space-y-6">
       <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">
@@ -53,7 +100,7 @@ const industry: React.FC<StepProps> = ({ data, onNext, onBack }) => {
       </button>
 
       <div className="flex flex-wrap gap-2">
-        {INDUSTRY_OPTIONS.map((tag) => (
+        {displayedTags.map((tag) => (
           <button
             key={tag}
             onClick={() => toggleTag(tag)}
@@ -67,6 +114,13 @@ const industry: React.FC<StepProps> = ({ data, onNext, onBack }) => {
           </button>
         ))}
       </div>
+
+      <button
+        onClick={() => setShowAll(!showAll)}
+        className="mt-2 text-sm text-blue-600 hover:underline"
+      >
+        {showAll ? 'Show Less' : 'View More'}
+      </button>
 
       <div className="flex justify-between pt-6">
         <button onClick={onBack} className="text-gray-600 dark:text-gray-300">
@@ -83,4 +137,4 @@ const industry: React.FC<StepProps> = ({ data, onNext, onBack }) => {
   );
 };
 
-export default industry;
+export default Step8_Industry;

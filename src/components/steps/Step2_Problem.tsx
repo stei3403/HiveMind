@@ -20,7 +20,7 @@ const problem: React.FC<StepProps> = ({ data, onNext, onBack, onSubmit, isLastSt
       <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">What problem does it solve?</h2>
       <textarea
         className="w-full p-4 border rounded-md dark:bg-gray-800 dark:text-white"
-        rows={4}
+        rows={5 }
         placeholder="Describe the problem..."
         value={input}
         onChange={e => setInput(e.target.value)}

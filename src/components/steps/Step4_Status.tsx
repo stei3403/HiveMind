@@ -17,8 +17,10 @@ const statusOptions = [
 ];
 
 const status: React.FC<StepProps> = ({ data, onNext, onBack }) => {
-  const initialIndex = statusOptions.indexOf(data.status) || 0;
+  //const initialIndex = statusOptions.indexOf(data.status) || 0;
+  const initialIndex = 0;
   const [sliderValue, setSliderValue] = useState(initialIndex);
+  console.log("SliderValue", sliderValue);
 
   const handleContinue = () => {
     onNext({ status: statusOptions[sliderValue] });

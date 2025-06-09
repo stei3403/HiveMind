@@ -20,7 +20,7 @@ const solution: React.FC<StepProps> = ({ data, onNext, onBack, onSubmit, isLastS
       <h2 className="text-2xl font-semibold text-gray-800 dark:text-white">How does it work?</h2>
       <textarea
         className="w-full p-4 border rounded-md dark:bg-gray-800 dark:text-white"
-        rows={4}
+        rows={5}
         placeholder="Explain your solution..."
         value={input}
         onChange={e => setInput(e.target.value)}
