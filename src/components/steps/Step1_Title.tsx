@@ -8,11 +8,11 @@ interface StepProps {
   isLastStep?: boolean;
 }
 
-const name: React.FC<StepProps> = ({ data, onNext, onBack }) => {
-  const [input, setInput] = useState(data.name || '');
+const Step1_Title: React.FC<StepProps> = ({ data, onNext, onBack }) => {
+  const [input, setInput] = useState(data.title || '');
 
   const handleContinue = () => {
-    onNext({ name: input }); // ✅ Consistent key
+    onNext({ title: input });
   };
 
   return (
@@ -21,7 +21,7 @@ const name: React.FC<StepProps> = ({ data, onNext, onBack }) => {
       <textarea
         className="w-full p-4 border rounded-md dark:bg-gray-800 dark:text-white"
         rows={1}
-        placeholder="Enter your idea name..."
+        placeholder="Enter your idea title..."
         value={input}
         onChange={e => setInput(e.target.value)}
       />
@@ -38,4 +38,4 @@ const name: React.FC<StepProps> = ({ data, onNext, onBack }) => {
   );
 };
 
-export default name;
+export default Step1_Title;

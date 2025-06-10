@@ -2,19 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import IdeaCard from '../components/IdeaCard';
+import { useNavigate } from 'react-router-dom';
 
 type Idea = {
   id: string;
   title: string;
-  description: string;
+  problem: string;
+  solution: string;
   category: string;
   status: string;
   upvotes: number;
   authorName: string;
+  featureImage?: string;
 };
 
 const BrowsePage = () => {
   const [ideas, setIdeas] = useState<Idea[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchIdeas = async () => {
@@ -49,15 +53,22 @@ const BrowsePage = () => {
       {/* Idea Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {ideas.map(idea => (
-          <IdeaCard
+          <div
             key={idea.id}
-            title={idea.title}
-            description={idea.description}
-            category={idea.category}
-            status={idea.status}
-            upvotes={idea.upvotes}
-            author={idea.authorName}
-          />
+            onClick={() => navigate(`/idea/${idea.id}`)}
+            className="cursor-pointer hover:scale-[1.01] transition-transform"
+          >
+            <IdeaCard
+              title={idea.title}
+              problem={idea.problem}
+              solution={idea.solution}
+              category={idea.category}
+              status={idea.status}
+              upvotes={idea.upvotes}
+              author={idea.authorName}
+              featureImage={idea.featureImage}
+            />
+          </div>
         ))}
       </div>
     </div>

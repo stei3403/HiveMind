@@ -1,5 +1,5 @@
 export interface IdeaFormData {
-  name?: string;
+  title?: string;
   problem?: string;
   solution?: string;
   status?: string;

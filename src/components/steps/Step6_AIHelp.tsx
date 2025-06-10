@@ -10,7 +10,7 @@ interface StepProps {
 
 const Step6_AIHelp: React.FC<StepProps> = ({ onNext, onBack }) => {
   const handleChoice = (value: string) => {
-    onNext({ Step6_AIHelp: value });
+    onNext({ Step6_AIHelp: value === "Yes" });
   };
 
   return (

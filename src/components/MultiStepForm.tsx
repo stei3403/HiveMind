@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import { useOpenAISuggestion } from "../hooks/useOpenAISuggestion";
 import { StepProps, IdeaFormData } from '../types/formTypes';
-import Step1_NameIdea from './steps/Step1_NameIdea';
+import Step1_Title from './steps/Step1_Title';
 import Step2_Problem from './steps/Step2_Problem';
 import Step3_Solution from './steps/Step3_Solution';
 import Step4_Status from './steps/Step4_Status';
@@ -17,8 +17,13 @@ import Step10_Team from './steps/Step10_Team';
 import Step11_Tags from './steps/Step11_Tags';
 import Step12_Review from './steps/Step12_Review';
 
+import { db } from '../firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+
+import Step13_Photos from './steps/Step13_Photos';
+
 const steps = [
-  Step1_NameIdea,
+  Step1_Title,
   Step2_Problem,
   Step3_Solution,
   Step4_Status,
@@ -29,6 +34,7 @@ const steps = [
   Step9_BusinessModel,
   Step10_Team,
   Step11_Tags,
+  Step13_Photos,
   Step12_Review,
 ];
 
@@ -68,12 +74,27 @@ const MultiStepForm: React.FC = () => {
     setStepIndex(prev => Math.max(prev - 1, 0));
   };
 
-  const handleSubmit = () => {
-    toast.success('🎉 Idea submitted!');
+const handleSubmit = async () => {
+  if (!formData.title || !formData.problem || !formData.solution) {
+    toast.error("Please complete the required fields.");
+    return;
+  }
+
+  try {
+    await addDoc(collection(db, "ideas"), {
+      ...formData,
+      upvotes: 0,
+      createdAt: serverTimestamp(),
+    });
+    toast.success("🎉 Idea submitted!");
     setFormData({});
     setStepIndex(0);
-    navigate('/thanks');
-  };
+    navigate("/thanks");
+  } catch (error) {
+    console.error("Error submitting idea:", error);
+    toast.error("Something went wrong. Please try again.");
+  }
+};
 
   return (
     <div className="min-h-screen flex flex-col justify-between px-4 py-6 bg-gray-50 dark:bg-gray-900">

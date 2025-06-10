@@ -11,7 +11,7 @@ interface StepProps {
 }
 
 const fieldConfig = [
-  { key: 'name', label: 'Idea Name', type: 'input', aiField: 'name' },
+  { key: 'title', label: 'Idea Title', type: 'input', aiField: 'title' },
   { key: 'problem', label: 'Problem', type: 'textarea', aiField: 'problem' },
   { key: 'solution', label: 'Solution', type: 'textarea', aiField: 'solution' },
   { key: 'status', label: 'Current Status', type: 'input', aiField: 'status' },
