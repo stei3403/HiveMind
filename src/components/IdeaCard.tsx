@@ -28,7 +28,7 @@ return (
     <img
       src={featureImage || '/No Image Available Placeholder.png'}
       alt="Feature"
-      className="w-full h-32 object-cover rounded-md mb-2"
+      className="w-full h-48 object-cover rounded-md mb-2"
       onError={(e) => {
         e.currentTarget.onerror = null;
         e.currentTarget.src = '/No Image Available Placeholder.png';
