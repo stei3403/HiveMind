@@ -16,11 +16,10 @@ import Step9_BusinessModel from './steps/Step9_BusinessModel';
 import Step10_Team from './steps/Step10_Team';
 import Step11_Tags from './steps/Step11_Tags';
 import Step12_Review from './steps/Step12_Review';
+import Step13_Photos from './steps/Step13_Photos';
 
 import { db } from '../firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-
-import Step13_Photos from './steps/Step13_Photos';
 
 const steps = [
   Step1_Title,
@@ -44,6 +43,10 @@ const MultiStepForm: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { generateSuggestion } = useOpenAISuggestion();
+
+  if (!user) {
+    return <div className="text-center mt-20">Please log in to submit ideas.</div>;
+  }
 
   useEffect(() => {
     if (user) {
@@ -74,27 +77,33 @@ const MultiStepForm: React.FC = () => {
     setStepIndex(prev => Math.max(prev - 1, 0));
   };
 
-const handleSubmit = async () => {
-  if (!formData.title || !formData.problem || !formData.solution) {
-    toast.error("Please complete the required fields.");
-    return;
-  }
+  const handleSubmit = async () => {
+    if (!formData.title || !formData.problem || !formData.solution) {
+      toast.error("Please complete the required fields.");
+      return;
+    }
 
-  try {
-    await addDoc(collection(db, "ideas"), {
-      ...formData,
-      upvotes: 0,
-      createdAt: serverTimestamp(),
-    });
-    toast.success("🎉 Idea submitted!");
-    setFormData({});
-    setStepIndex(0);
-    navigate("/thanks");
-  } catch (error) {
-    console.error("Error submitting idea:", error);
-    toast.error("Something went wrong. Please try again.");
-  }
-};
+    // Sanitize formData to remove undefined fields
+    const cleanedData = Object.fromEntries(
+      Object.entries(formData).filter(([_, v]) => v !== undefined)
+    );
+
+    try {
+      await addDoc(collection(db, "ideas"), {
+        ...cleanedData,
+        upvotes: 0,
+        authorId: user.uid,
+        createdAt: serverTimestamp(),
+      });
+      toast.success("🎉 Idea submitted!");
+      setFormData({});
+      setStepIndex(0);
+      navigate("/thanks");
+    } catch (error) {
+      console.error("Error submitting idea:", error);
+      toast.error("Something went wrong. Please try again.");
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col justify-between px-4 py-6 bg-gray-50 dark:bg-gray-900">
@@ -103,9 +112,7 @@ const handleSubmit = async () => {
           {steps.map((_, i) => (
             <div
               key={i}
-              className={`h-2 w-2 rounded-full ${
-                i === stepIndex ? 'bg-yellow-400' : 'bg-gray-300 dark:bg-gray-700'
-              }`}
+              className={`h-2 w-2 rounded-full ${i === stepIndex ? 'bg-yellow-400' : 'bg-gray-300 dark:bg-gray-700'}`}
             ></div>
           ))}
         </div>

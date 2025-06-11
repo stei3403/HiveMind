@@ -2,8 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-// import LandingPage from './pages/LandingPage'; // Original LandingPage import
-import LandingPage from './pages/LandingPage'; // New LandingPage based on Figma
+import LandingPage from './pages/LandingPage';
 import SubmitPage from './pages/SubmitPage';
 import BrowsePage from './pages/BrowsePage';
 import LoginPage from './pages/LoginPage';
@@ -11,6 +10,9 @@ import ThankYouPage from './pages/ThankYouPage';
 import ProtectedRoute from './routes/ProtectedRoute';
 import { Toaster } from 'react-hot-toast';
 import IdeaDetailPage from './pages/IdeaDetailPage';
+import AccountPage from './pages/AccountPage';
+import MyIdeasPage from './pages/MyIdeasPage';
+
 
 function App() {
   return (
@@ -23,6 +25,9 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/thanks" element={<ThankYouPage />} />  
         <Route path="/idea/:id" element={<IdeaDetailPage />} />
+        <Route path="/account" element={<AccountPage />} />
+        <Route path="/my-ideas" element={<MyIdeasPage />} />
+
       </Routes>
       <Toaster position="top-right" />
       {/* Footer is part of LandingPage, but might be needed globally for other pages */}

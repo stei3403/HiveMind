@@ -3,18 +3,7 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import IdeaCard from '../components/IdeaCard';
 import { Link } from 'react-router-dom';
-
-type Idea = {
-  id: string;
-  title: string;
-  problem: string;
-  solution: string;
-  status: string;
-  upvotes: number;
-  authorName: string;
-  tags?: string[];
-  featureImage?: string;
-};
+import { Idea } from '../types/ideaTypes';
 
 const BrowsePage = () => {
   const [ideas, setIdeas] = useState<Idea[]>([]);
@@ -156,13 +145,14 @@ const BrowsePage = () => {
         {filteredIdeas.map(idea => (
           <Link to={`/idea/${idea.id}`} key={idea.id}>
             <IdeaCard
+              id={idea.id}
               title={idea.title}
               problem={idea.problem}
               solution={idea.solution}
               category={idea.tags?.[0] || ''}
               status={idea.status}
               upvotes={idea.upvotes}
-              author={idea.authorName}
+              authorId={idea.authorId}
               featureImage={idea.featureImage}
             />
           </Link>

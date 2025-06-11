@@ -5,25 +5,15 @@ import IdeaCard from '../components/IdeaCard';
 import FinalCallToAction from '../components/FinalCallToAction';
 import Footer from '../components/Footer';
 import { Link } from 'react-router-dom';
-
-// Type definition for idea
-type Idea = {
-  id: string;
-  title: string;
-  problem: string;
-  solution: string;
-  category: string;
-  status: string;
-  upvotes: number;
-  authorName: string;
-  featureImage?: string;
-};
+import { useNavigate } from 'react-router-dom';
+import { Idea } from '../types/ideaTypes';
 
 const LandingPage: React.FC = () => {
   const [ideas, setIdeas] = useState<Idea[]>([]);
   const fullSubtitle = "Transform your unused ideas into collaborative projects. Share, discover, and build amazing things together.";
   const [subtitle, setSubtitle] = useState('');
   const [subtitleCursorVisible, setSubtitleCursorVisible] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchIdeas = async () => {
@@ -37,9 +27,9 @@ const LandingPage: React.FC = () => {
             problem: data.problem,
             solution: data.solution,
             category: data.category || 'General',
-            status: data.status || 'Just an Idea',
+            status: data.status,
             upvotes: data.upvotes || 0,
-            authorName: data.authorName || 'Anonymous',
+            authorId: data.authorId || 'Anonymous',
             featureImage: data.featureImage || '',
           };
         }) as Idea[];
@@ -118,25 +108,27 @@ const LandingPage: React.FC = () => {
             <p className="text-lg text-gray-600 dark:text-gray-300 text-center max-w-xl mx-auto mb-12">
               Discover ideas waiting to be built. Find your next project.
             </p>
+
             <div className="grid md:grid-cols-3 gap-8">
               {[...ideas]
                 .sort((a, b) => b.upvotes - a.upvotes)
                 .slice(0, 3)
                 .map((idea) => (
-
-                <IdeaCard
-                  key={idea.id}
-                  title={idea.title}
-                  problem={idea.problem}
-                  solution={idea.solution}
-                  category={idea.category}
-                  status={idea.status}
-                  upvotes={idea.upvotes}
-                  author={idea.authorName}
-                  featureImage={idea.featureImage}
-                />
+                  <IdeaCard
+                    key={idea.id}
+                    id={idea.id}
+                    title={idea.title}
+                    problem={idea.problem}
+                    solution={idea.solution}
+                    category={idea.category}
+                    status={idea.status}
+                    upvotes={idea.upvotes}
+                    authorId={idea.authorId}
+                    featureImage={idea.featureImage}
+                  />
               ))}
             </div>
+
             <div className="text-center mt-12">
               <Link to="/browse" className="bg-yellow-400 hover:bg-yellow-500 text-gray-800 font-semibold py-3 px-6 rounded-full transition-all duration-200 ease-in-out transform hover:-translate-y-px hover:shadow-xl">
                 Browse All Ideas →
@@ -144,6 +136,7 @@ const LandingPage: React.FC = () => {
             </div>
           </div>
         </section>
+
 
 
         {/* How HiveMind Works Section */}

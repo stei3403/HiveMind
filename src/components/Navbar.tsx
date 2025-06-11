@@ -55,34 +55,36 @@ const Navbar: React.FC = () => {
           <Link to="/#how-it-works" className="text-gray-600 dark:text-gray-300 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors">How it Works</Link>
           <Link to="/#community" className="text-gray-600 dark:text-gray-300 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors">Community</Link>
         </div>
-          {user ? (
-                      <div className="relative" ref={dropdownRef}>
-                        <button onClick={() => setDropdownOpen(!dropdownOpen)} className="focus:outline-none">
-                          <img
-                            src={user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName || user.email || 'User'}`}
-                            alt="avatar"
-                            className="w-8 h-8 rounded-full border border-gray-300 shadow-sm"
-                          />
-                        </button>
-                        {dropdownOpen && (
-                          <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50 py-2 text-sm">
-                            <Link to="/settings" className="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                              Settings
-                            </Link>
-                            <Link to="/my-ideas" className="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                              My Ideas
-                            </Link>
-                            <button onClick={logout} className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-gray-700">
-                              Logout
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      <Link to="/submit" className="bg-yellow-400 hover:bg-yellow-500 text-white px-4 py-2 rounded-full font-semibold shadow">
-                        Get Started
-                      </Link>
-                    )}
+
+        {user ? (
+          <div className="relative" ref={dropdownRef}>
+            <button onClick={() => setDropdownOpen(!dropdownOpen)} className="focus:outline-none">
+              <img
+                src={user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName || user.email || 'User'}`}
+                alt="avatar"
+                className="w-8 h-8 rounded-full border border-gray-300 shadow-sm"
+              />
+            </button>
+            {dropdownOpen && (
+              <div className="absolute right-0 mt-2 w-44 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50 py-2 text-sm">
+                <Link to="/my-ideas" className="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                  My Ideas
+                </Link>
+                <Link to="/account" className="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                  Account
+                </Link>
+                <button onClick={logout} className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-gray-700">
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <Link to="/submit" className="bg-yellow-400 hover:bg-yellow-500 text-white px-4 py-2 rounded-full font-semibold shadow">
+            Get Started
+          </Link>
+        )}
+
         <div className="flex items-center space-x-3">
           <button
             onClick={toggleTheme}
@@ -101,7 +103,7 @@ const Navbar: React.FC = () => {
           </button>
 
           <div className="md:hidden">
-            <button 
+            <button
               onClick={toggleMobileMenu}
               className="text-gray-800 dark:text-gray-200 focus:outline-none p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
               aria-label="Toggle mobile menu"

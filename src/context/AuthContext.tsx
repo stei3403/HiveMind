@@ -2,8 +2,30 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { auth } from '../firebase';
 import { User, onAuthStateChanged, signOut } from 'firebase/auth';
 import toast from 'react-hot-toast';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../firebase';
+
+// This function creates or updates the user profile in Firestore
+const createOrUpdateUserProfile = async (user: User) => {
+  const userRef = doc(db, 'users', user.uid);
+  const userDoc = await getDoc(userRef);
+
+  const profileData = {
+    displayName: user.displayName || user.email || 'Anonymous',
+    email: user.email,
+    photoURL: user.photoURL || '',
+    updatedAt: serverTimestamp(),
+  };
+
+  if (!userDoc.exists()) {
+    await setDoc(userRef, {
+      ...profileData,
+      createdAt: serverTimestamp()
+    });
+  } else {
+    await setDoc(userRef, profileData, { merge: true });
+  }
+};
 
 interface AuthContextType {
   user: User | null;
@@ -21,19 +43,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
-
       if (currentUser) {
-        const userRef = doc(db, 'users', currentUser.uid);
-        const userSnap = await getDoc(userRef);
-
-        if (!userSnap.exists()) {
-          await setDoc(userRef, {
-            displayName: currentUser.displayName || '',
-            email: currentUser.email,
-            photoURL: currentUser.photoURL || '',
-            createdAt: new Date(),
-          });
-        }
+        await createOrUpdateUserProfile(currentUser);
       }
     });
 
