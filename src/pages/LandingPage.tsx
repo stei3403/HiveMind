@@ -63,7 +63,7 @@ const LandingPage: React.FC = () => {
           clearInterval(typingInterval);
           setSubtitleCursorVisible(false);
         }
-      }, 50);
+      }, 35);
       return () => clearInterval(typingInterval);
     } else {
       setSubtitleCursorVisible(false);
@@ -123,18 +123,19 @@ const LandingPage: React.FC = () => {
                 .sort((a, b) => b.upvotes - a.upvotes)
                 .slice(0, 3)
                 .map((idea) => (
-
-                <IdeaCard
-                  key={idea.id}
-                  title={idea.title}
-                  problem={idea.problem}
-                  solution={idea.solution}
-                  category={idea.category}
-                  status={idea.status}
-                  upvotes={idea.upvotes}
-                  author={idea.authorName}
-                  featureImage={idea.featureImage}
-                />
+                <Link to={`/idea/${idea.id}`} key={idea.id}>
+                  <IdeaCard
+                    key={idea.id}
+                    title={idea.title}
+                    problem={idea.problem}
+                    solution={idea.solution}
+                    category={idea.category}
+                    status={idea.status}
+                    upvotes={idea.upvotes}
+                    author={idea.authorName}
+                    featureImage={idea.featureImage}
+                  />
+                </Link>
               ))}
             </div>
             <div className="text-center mt-12">

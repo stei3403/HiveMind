@@ -13,6 +13,7 @@ type IdeaCardProps = {
 };
 ;
 
+
 const IdeaCard = ({ title, problem, solution, category, status, upvotes, author, featureImage }: IdeaCardProps) => {
   const cardClasses = `bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 ease-in-out p-5 flex flex-col gap-4 transform hover:scale-[1.03]`;
   const categoryClasses = `text-xs uppercase tracking-wide text-blue-600 dark:text-blue-400 font-semibold`;
@@ -24,6 +25,7 @@ const IdeaCard = ({ title, problem, solution, category, status, upvotes, author,
   const authorClasses = `font-semibold text-gray-700 dark:text-gray-200`;
 
 return (
+  
   <div className={cardClasses}>
     <img
       src={featureImage || '/No Image Available Placeholder.png'}
