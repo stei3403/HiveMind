@@ -67,5 +67,41 @@
       "travel logistics",
       "hospitality"
     ]
+  },
+  {
+    "title": "PatternAlert",
+    "problem": "Pilots operating near non-towered and low-traffic airports often rely on radio calls, visual scanning, and fragmented traffic displays to understand who is nearby. Missed calls, wrong frequencies, poor visibility, student-pilot workload, and aircraft without perfect position awareness can make the traffic pattern feel more dangerous than it should, especially when multiple aircraft converge around the same runway.",
+    "solution": "PatternAlert provides aircraft proximity and traffic-pattern awareness for small airports. It monitors nearby aircraft position data, identifies likely arrivals, departures, and pattern conflicts, and sends simple, timely alerts to pilots or airport stakeholders when traffic may require attention. The goal is not to replace ATC or pilot judgment, but to create an extra safety layer for places where pilots are mostly coordinating themselves.",
+    "status": "Currently Building",
+    "authorName": "Gabe Steiner",
+    "industry": [
+      "Aviation",
+      "Safety Tech",
+      "General Aviation",
+      "Airport Operations",
+      "SaaS"
+    ],
+    "businessModel": "Revenue can come from subscriptions for airport operators, flying clubs, flight schools, and FBOs that want local traffic awareness dashboards and alerts. Additional revenue can come from premium pilot accounts, white-labeled airport safety pages, integrations with ADS-B receivers or airport websites, and paid analytics for traffic volume, runway usage, training activity, and operational risk trends.",
+    "targetAudience": "General aviation pilots, student pilots, flight instructors, flying clubs, flight schools, non-towered airport managers, FBOs, and small airport communities that want better local traffic awareness without the cost or complexity of towered operations.",
+    "whyNow": "ADS-B adoption, affordable receiver hardware, cloud alerts, and growing concern around runway incursions and non-towered airport safety make lightweight traffic-pattern intelligence more practical. Small airports have more data available than ever, but most still lack simple tools that convert that data into useful local safety signals.",
+    "features": [
+      "Nearby aircraft monitoring around selected airports",
+      "Traffic-pattern and runway-area awareness",
+      "Configurable proximity alerts",
+      "Airport-specific dashboards",
+      "Support for flight schools and training-heavy airports",
+      "Historical traffic and pattern analytics",
+      "Optional public airport status or safety page",
+      "Integration path for local ADS-B receivers",
+      "Alert tuning to reduce noise and avoid alarm fatigue"
+    ],
+    "tags": [
+      "aviation",
+      "general aviation",
+      "airport safety",
+      "ADS-B",
+      "traffic awareness",
+      "pilot tools"
+    ]
   }
 ]
