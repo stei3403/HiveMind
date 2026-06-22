@@ -1,0 +1,71 @@
+[
+  {
+    "title": "Unpacked",
+    "problem": "Travelers often overpack, pay checked-bag fees, stress over outfit planning, and return home with laundry they do not want to handle. Many also buy vacation outfits they may only wear once, while sustainable fashion options remain inconvenient during travel.",
+    "solution": "Unpacked places clothing rental kiosks in hotels, resorts, and cruise ships so vacationers can pack lighter and access fresh, stylish travel outfits on arrival. Guests can reserve looks before the trip or choose items on-site, then return everything to the kiosk before departure.",
+    "status": "Researching",
+    "authorName": "Gabe Steiner",
+    "industry": [
+      "Travel",
+      "Fashion",
+      "Hospitality",
+      "Sustainability"
+    ],
+    "businessModel": "Core revenue comes from daily and weekly outfit rentals, bundled vacation packages, premium pre-order styling, room-delivery convenience fees, and add-on accessory rentals. Additional revenue can come from late/lost/damaged item fees, a buy-it option for guests who want to keep items, sustainable fashion brand sponsorships, hotel/resort commission splits or kiosk leases, and a future JetSet Club subscription for frequent travelers.",
+    "targetAudience": "Vacationers who want to pack light, avoid checked-bag fees, skip post-trip laundry, and access stylish resortwear without buying one-time-use outfits.",
+    "whyNow": "Airline baggage fees, social-media-driven travel wardrobes, sustainability pressure, and hotel/cruise digitization create a strong opening for convenient destination-based apparel rental.",
+    "features": [
+      "Hotel, resort, and cruise ship rental kiosks",
+      "Pre-trip outfit reservations",
+      "On-site browsing and checkout",
+      "Ready-in-room delivery at partner properties",
+      "Accessory rentals for hats, purses, jewelry, sunglasses, and shoes",
+      "Easy kiosk returns before departure",
+      "Loved it, buy it purchase option"
+    ],
+    "tags": [
+      "travel",
+      "fashion rental",
+      "hospitality",
+      "sustainable fashion",
+      "kiosks",
+      "vacation"
+    ]
+  },
+  {
+    "title": "StrollOn",
+    "problem": "Parents traveling with young children often have to lug bulky strollers through airports, gate-check them, wait for them after landing, or risk delays, damage, and lost gear. Strollers also take up trunk and luggage space, and there is no convenient one-way rental system that works across airports, hotels, theme parks, and multi-leg trips.",
+    "solution": "StrollOn offers on-demand stroller rentals at airports and travel hubs. Parents can reserve or unlock a clean, quality stroller from a kiosk, use it throughout the trip for flights, hotels, Ubers, attractions, and theme parks, then return it at any participating location.",
+    "status": "Researching",
+    "authorName": "Gabe Steiner",
+    "industry": [
+      "Travel",
+      "Family Tech",
+      "Hospitality",
+      "Baby Gear",
+      "Logistics"
+    ],
+    "businessModel": "Revenue comes from hourly, daily, and weekly stroller rentals, monthly subscriptions for frequent family travelers, add-ons such as sunshades, snack trays, weather covers, double strollers, and newborn inserts, plus loss or damage fees. Additional revenue can come from baby gear brand partnerships, affiliate sales, and white-labeled stroller rental programs for airports, airlines, hotels, resorts, and theme parks.",
+    "targetAudience": "Parents and caregivers traveling with babies or young children, especially families flying through major airports, visiting resorts or theme parks, or taking multi-leg trips where bringing a stroller is stressful.",
+    "whyNow": "Family travel is growing, airports and resorts are investing in better passenger experiences, and parents increasingly expect app-based convenience. One-way rental behavior is already familiar from car rentals, bikes, scooters, lockers, and luggage services, but stroller rentals remain fragmented and destination-bound.",
+    "features": [
+      "Airport and travel-hub stroller kiosks",
+      "App or website reservations",
+      "On-site stroller unlock",
+      "One-way returns at partner locations",
+      "Hourly, daily, and weekly rental options",
+      "Double strollers and newborn inserts",
+      "RFID or GPS inventory tracking",
+      "Regular cleaning and quality checks",
+      "Add-on rentals for sunshades, snack trays, and weather covers"
+    ],
+    "tags": [
+      "family travel",
+      "stroller rental",
+      "airport tech",
+      "baby gear",
+      "travel logistics",
+      "hospitality"
+    ]
+  }
+]
