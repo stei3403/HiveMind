@@ -51,6 +51,8 @@ The new `LandingPage.tsx` already uses `font-playfair-display` for relevant text
 
 ## Running the Project
 
+Use Node.js `24.17.0` for local development. The Firebase Functions deployment runtime is Node `22`, because that is the current supported Firebase runtime line for this project.
+
 ```bash
 npm install
 npm run dev
