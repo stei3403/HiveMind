@@ -1,0 +1,12 @@
+[
+  {
+    "title": "Example Idea",
+    "problem": "People need a clear example format before importing a batch of ideas.",
+    "solution": "Provide a small JSON template that can be copied and edited safely.",
+    "status": "Just an Idea",
+    "authorName": "HiveMind Admin",
+    "industry": ["Productivity"],
+    "businessModel": "Free community resource with optional paid tools later.",
+    "tags": ["example", "template"]
+  }
+]

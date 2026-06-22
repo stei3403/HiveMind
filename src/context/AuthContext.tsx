@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { auth } from '../firebase';
 import { User, onAuthStateChanged, signOut } from 'firebase/auth';
 import toast from 'react-hot-toast';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, serverTimestamp, setDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 
 interface AuthContextType {
@@ -28,10 +28,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         if (!userSnap.exists()) {
           await setDoc(userRef, {
+            uid: currentUser.uid,
             displayName: currentUser.displayName || '',
             email: currentUser.email,
             photoURL: currentUser.photoURL || '',
-            createdAt: new Date(),
+            createdAt: serverTimestamp(),
           });
         }
       }

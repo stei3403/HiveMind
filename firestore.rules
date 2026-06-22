@@ -1,8 +1,137 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn() && request.auth.token.admin == true;
+    }
+
+    function validStatus(status) {
+      return status in [
+        'Just an Idea',
+        'Researching',
+        'Currently Building',
+        'Built and Launched',
+        'Iterating and Improving'
+      ];
+    }
+
+    function optionalString(field, maxLength) {
+      return !request.resource.data.keys().hasAny([field]) ||
+        (request.resource.data[field] is string &&
+          request.resource.data[field].size() <= maxLength);
+    }
+
+    function optionalList(field, maxLength) {
+      return !request.resource.data.keys().hasAny([field]) ||
+        (request.resource.data[field] is list &&
+          request.resource.data[field].size() <= maxLength);
+    }
+
+    function validIdeaFields() {
+      return request.resource.data.keys().hasOnly([
+        'title',
+        'problem',
+        'solution',
+        'status',
+        'links',
+        'authorName',
+        'authorUid',
+        'industry',
+        'marketSize',
+        'businessModel',
+        'team',
+        'targetAudience',
+        'whyNow',
+        'features',
+        'tags',
+        'images',
+        'featureImage',
+        'upvotes',
+        'createdAt',
+        'updatedAt'
+      ]);
+    }
+
+    function validIdeaShape() {
+      return validIdeaFields() &&
+        request.resource.data.title is string &&
+        request.resource.data.title.size() >= 3 &&
+        request.resource.data.title.size() <= 120 &&
+        request.resource.data.problem is string &&
+        request.resource.data.problem.size() >= 10 &&
+        request.resource.data.problem.size() <= 2000 &&
+        request.resource.data.solution is string &&
+        request.resource.data.solution.size() >= 10 &&
+        request.resource.data.solution.size() <= 2000 &&
+        validStatus(request.resource.data.status) &&
+        request.resource.data.authorName is string &&
+        request.resource.data.authorName.size() <= 120 &&
+        request.resource.data.authorUid is string &&
+        request.resource.data.upvotes is int &&
+        optionalString('links', 1000) &&
+        optionalString('marketSize', 1000) &&
+        optionalString('businessModel', 2000) &&
+        optionalString('team', 1000) &&
+        optionalString('targetAudience', 1000) &&
+        optionalString('whyNow', 1000) &&
+        optionalString('featureImage', 2000) &&
+        optionalList('industry', 12) &&
+        optionalList('features', 20) &&
+        optionalList('tags', 20) &&
+        optionalList('images', 3);
+    }
+
+    function validUserProfile() {
+      return request.resource.data.keys().hasOnly([
+        'uid',
+        'displayName',
+        'email',
+        'photoURL',
+        'createdAt',
+        'updatedAt'
+      ]) &&
+      request.resource.data.uid == request.auth.uid &&
+      optionalString('displayName', 120) &&
+      optionalString('email', 320) &&
+      optionalString('photoURL', 2000);
+    }
+
+    match /ideas/{ideaId} {
+      allow read: if true;
+      allow create: if signedIn() &&
+        validIdeaShape() &&
+        request.resource.data.authorUid == request.auth.uid &&
+        request.resource.data.upvotes == 0 &&
+        request.resource.data.createdAt == request.time;
+      allow update: if signedIn() &&
+        validIdeaShape() &&
+        resource.data.authorUid == request.resource.data.authorUid &&
+        resource.data.createdAt == request.resource.data.createdAt &&
+        request.resource.data.updatedAt == request.time &&
+        (resource.data.authorUid == request.auth.uid || isAdmin());
+      allow delete: if signedIn() &&
+        (resource.data.authorUid == request.auth.uid || isAdmin());
+    }
+
+    match /users/{userId} {
+      allow read: if signedIn() && (userId == request.auth.uid || isAdmin());
+      allow create: if signedIn() &&
+        userId == request.auth.uid &&
+        validUserProfile() &&
+        request.resource.data.createdAt == request.time;
+      allow update: if signedIn() &&
+        userId == request.auth.uid &&
+        validUserProfile() &&
+        resource.data.createdAt == request.resource.data.createdAt &&
+        request.resource.data.updatedAt == request.time;
+    }
+
     match /{document=**} {
-      allow read, write: if request.auth != null;
+      allow read, write: if false;
     }
   }
 }

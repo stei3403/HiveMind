@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
-import { useOpenAISuggestion } from "../hooks/useOpenAISuggestion";
-import { StepProps, IdeaFormData } from '../types/formTypes';
+import { IdeaFormData } from '../types/formTypes';
 import Step1_Title from './steps/Step1_Title';
 import Step2_Problem from './steps/Step2_Problem';
 import Step3_Solution from './steps/Step3_Solution';
@@ -43,13 +42,13 @@ const MultiStepForm: React.FC = () => {
   const [formData, setFormData] = useState<IdeaFormData>({});
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { generateSuggestion } = useOpenAISuggestion();
 
   useEffect(() => {
     if (user) {
       setFormData(prev => ({
         ...prev,
         authorName: user.displayName || user.email || 'Anonymous',
+        authorUid: user.uid,
       }));
     }
   }, [user]);
@@ -81,8 +80,16 @@ const handleSubmit = async () => {
   }
 
   try {
+    if (!user) {
+      toast.error("Please log in to submit your idea.");
+      return;
+    }
+
     await addDoc(collection(db, "ideas"), {
       ...formData,
+      authorName: formData.authorName || user.displayName || user.email || 'Anonymous',
+      authorUid: user.uid,
+      status: formData.status || 'Just an Idea',
       upvotes: 0,
       createdAt: serverTimestamp(),
     });

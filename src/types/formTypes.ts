@@ -12,6 +12,7 @@ export interface IdeaFormData {
   status?: IdeaStatus;
   links?: string;
   authorName?: string;
+  authorUid?: string;
   industry?: string[];
   marketSize?: string;
   businessModel?: string;
@@ -29,6 +30,7 @@ export interface IdeaRecord extends IdeaFormData {
   id: string;
   upvotes?: number;
   createdAt?: unknown;
+  updatedAt?: unknown;
 }
 
 export interface StepProps {

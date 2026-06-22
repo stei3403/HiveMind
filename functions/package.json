@@ -5,7 +5,8 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc",
-    "lint": "eslint --ext .js,.ts ."
+    "lint": "eslint --ext .js,.ts .",
+    "import:ideas": "node scripts/importIdeas.js ../data/ideas.example.json --dry-run"
   },
   "dependencies": {
     "cors": "^2.8.5",
