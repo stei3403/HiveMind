@@ -9,10 +9,13 @@ export function useOpenAISuggestion() {
     setError(null);
 
     const debug = import.meta.env.MODE === "development";
+    const autofillUrl =
+      import.meta.env.VITE_OPENAI_AUTOFILL_URL ||
+      "https://us-central1-hivemindapp-f1ac8.cloudfunctions.net/openaiAutofill";
 
     try {
       const response = await fetch(
-        `https://us-central1-hivemindapp-f1ac8.cloudfunctions.net/openaiAutofill${debug ? "?debug=true" : ""}`,
+        `${autofillUrl}${debug ? "?debug=true" : ""}`,
         {
           method: "POST",
           headers: {
@@ -23,6 +26,9 @@ export function useOpenAISuggestion() {
       );
 
       const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to generate suggestion");
+      }
 
       // Safely log everything for debugging
       if (debug) {

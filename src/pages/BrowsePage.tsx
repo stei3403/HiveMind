@@ -3,22 +3,19 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import IdeaCard from '../components/IdeaCard';
 import { Link } from 'react-router-dom';
+import { IdeaRecord, IdeaStatus } from '../types/formTypes';
 
-type Idea = {
-  id: string;
-  title: string;
-  problem: string;
-  solution: string;
-  status: string;
-  upvotes: number;
-  authorName: string;
-  tags?: string[];
-  featureImage?: string;
-};
+const statusOptions: IdeaStatus[] = [
+  'Just an Idea',
+  'Researching',
+  'Currently Building',
+  'Built and Launched',
+  'Iterating and Improving',
+];
 
 const BrowsePage = () => {
-  const [ideas, setIdeas] = useState<Idea[]>([]);
-  const [filteredIdeas, setFilteredIdeas] = useState<Idea[]>([]);
+  const [ideas, setIdeas] = useState<IdeaRecord[]>([]);
+  const [filteredIdeas, setFilteredIdeas] = useState<IdeaRecord[]>([]);
 
   // Filters
   const [searchQuery, setSearchQuery] = useState('');
@@ -35,7 +32,7 @@ const BrowsePage = () => {
       const ideasData = querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data(),
-      })) as Idea[];
+      })) as IdeaRecord[];
 
       setIdeas(ideasData);
       setFilteredIdeas(ideasData);
@@ -78,7 +75,7 @@ const BrowsePage = () => {
 
     // Sort by upvotes
     updatedIdeas.sort((a, b) =>
-      sortDescending ? b.upvotes - a.upvotes : a.upvotes - b.upvotes
+      sortDescending ? (b.upvotes || 0) - (a.upvotes || 0) : (a.upvotes || 0) - (b.upvotes || 0)
     );
 
     setFilteredIdeas(updatedIdeas);
@@ -135,11 +132,9 @@ const BrowsePage = () => {
             className="w-full sm:w-auto border border-gray-300 dark:border-gray-700 rounded-md px-4 py-2 dark:bg-gray-800 dark:text-white"
           >
             <option value="">All Statuses</option>
-            <option value="Just an Idea">Just an Idea</option>
-            <option value="Researching">Researching</option>
-            <option value="Currently Building">Currently Building</option>
-            <option value="Built and Launched">Built and Launched</option>
-            <option value="Iterating and Improving">Iterating and Improving</option>
+            {statusOptions.map(status => (
+              <option key={status} value={status}>{status}</option>
+            ))}
           </select>
 
           <button
@@ -156,13 +151,13 @@ const BrowsePage = () => {
         {filteredIdeas.map(idea => (
           <Link to={`/idea/${idea.id}`} key={idea.id}>
             <IdeaCard
-              title={idea.title}
-              problem={idea.problem}
-              solution={idea.solution}
+              title={idea.title || 'Untitled idea'}
+              problem={idea.problem || ''}
+              solution={idea.solution || ''}
               category={idea.tags?.[0] || ''}
-              status={idea.status}
-              upvotes={idea.upvotes}
-              author={idea.authorName}
+              status={idea.status || 'Just an Idea'}
+              upvotes={idea.upvotes || 0}
+              author={idea.authorName || 'Anonymous'}
               featureImage={idea.featureImage}
             />
           </Link>
