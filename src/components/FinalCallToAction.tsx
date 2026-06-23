@@ -8,20 +8,20 @@ const FinalCallToAction = () => (
         Ready to Bring Your Ideas to Life?
       </h2>
       <p className="text-lg md:text-xl text-gray-700 dark:text-gray-100 max-w-xl mx-auto mb-10 animate-fadeInUp animate-delay-200">
-        Join HiveMind today and start collaborating on exciting new projects. Your next big idea could be just a click away.
+        Add a concept to the library or browse the ideas already waiting for the right builder.
       </p>
       <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4 animate-fadeInUp animate-delay-400">
         <Link
           to="/submit"
           className="bg-gray-800 dark:bg-white hover:bg-gray-700 dark:hover:bg-gray-200 text-white dark:text-gray-800 font-semibold py-4 px-8 rounded-full text-lg transition-all duration-200 ease-in-out transform hover:-translate-y-px hover:shadow-xl w-full sm:w-auto"
         >
-          🐝 Join the Hive
+          Submit an Idea
         </Link>
         <Link
-          to="/submit"
+          to="/browse"
           className="bg-transparent hover:bg-yellow-500/20 text-gray-800 dark:text-white dark:hover:bg-yellow-300/20 font-semibold py-4 px-8 rounded-full text-lg border-2 border-gray-800 dark:border-white transition-all duration-200 ease-in-out transform hover:-translate-y-px hover:shadow-xl w-full sm:w-auto"
         >
-          💡 Submit an Idea
+          Browse Ideas
         </Link>
       </div>
     </div>

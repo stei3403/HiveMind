@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
+import { Link } from 'react-router-dom';
 import { db } from '../firebase';
 import IdeaCard from '../components/IdeaCard';
 import FinalCallToAction from '../components/FinalCallToAction';
 import Footer from '../components/Footer';
-import { Link } from 'react-router-dom';
 import { getIdeaScore } from '../services/votes';
 
-// Type definition for idea
 type Idea = {
   id: string;
   title: string;
@@ -23,9 +22,10 @@ type Idea = {
   featureImage?: string;
 };
 
+const fullSubtitle = 'Turn ideas into projects.';
+
 const LandingPage: React.FC = () => {
   const [ideas, setIdeas] = useState<Idea[]>([]);
-  const fullSubtitle = "Transform your unused ideas into collaborative projects. Share, discover, and build amazing things together.";
   const [subtitle, setSubtitle] = useState('');
   const [subtitleCursorVisible, setSubtitleCursorVisible] = useState(true);
 
@@ -52,7 +52,7 @@ const LandingPage: React.FC = () => {
         }) as Idea[];
         setIdeas(ideasData);
       } catch (error) {
-        console.error("Error fetching ideas: ", error);
+        console.error('Error fetching ideas: ', error);
       }
     };
     fetchIdeas();
@@ -60,51 +60,50 @@ const LandingPage: React.FC = () => {
 
   useEffect(() => {
     let i = 0;
-    if (subtitle.length < fullSubtitle.length) {
-      setSubtitleCursorVisible(true);
-      const typingInterval = setInterval(() => {
-        if (i < fullSubtitle.length) {
-          setSubtitle(prev => prev + fullSubtitle.charAt(i));
-          i++;
-        } else {
-          clearInterval(typingInterval);
-          setSubtitleCursorVisible(false);
-        }
-      }, 35);
-      return () => clearInterval(typingInterval);
-    } else {
-      setSubtitleCursorVisible(false);
-    }
-  }, [fullSubtitle]);
+    setSubtitle('');
+    setSubtitleCursorVisible(true);
+
+    const typingInterval = setInterval(() => {
+      if (i < fullSubtitle.length) {
+        setSubtitle(prev => prev + fullSubtitle.charAt(i));
+        i++;
+      } else {
+        clearInterval(typingInterval);
+        setSubtitleCursorVisible(false);
+      }
+    }, 35);
+
+    return () => clearInterval(typingInterval);
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Hero Section */}
       <main className="flex-grow">
         <section className="relative overflow-hidden bg-gradient-to-b from-yellow-100 via-yellow-50 to-gray-50 dark:from-yellow-800/30 dark:via-gray-800/30 dark:to-gray-900 py-20 md:py-32">
           <div className="relative z-10 container mx-auto px-4 text-center">
             <div className="inline-block bg-white dark:bg-gray-700 shadow-md rounded-full px-4 py-2 mb-6">
-              <p className="text-sm font-semibold text-gray-700 dark:text-gray-200">✨ Open-Source Idea Commons</p>
+              <p className="text-sm font-semibold text-gray-700 dark:text-gray-200">Open-Source Idea Commons</p>
             </div>
             <h1 className="text-5xl md:text-7xl font-bold text-gray-800 dark:text-gray-100 mb-6 font-playfair-display">
               Where Ideas Find Their Wings
             </h1>
-            <p className={`text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-10 h-24 md:h-16 overflow-hidden whitespace-pre-wrap break-words ${subtitleCursorVisible ? 'animate-typing-cursor border-r-2 border-transparent' : ''}`}
-              style={{ borderColor: subtitleCursorVisible ? 'currentColor' : 'transparent' }}>
+            <p
+              className={`inline-block text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-full mx-auto mb-10 min-h-8 whitespace-nowrap overflow-hidden ${subtitleCursorVisible ? 'animate-typing-cursor border-r-2 border-transparent pr-1' : ''}`}
+              style={{ borderColor: subtitleCursorVisible ? 'currentColor' : 'transparent' }}
+            >
               {subtitle}
             </p>
             <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
               <Link to="/browse" className="bg-yellow-400 hover:bg-yellow-500 text-gray-800 font-semibold py-4 px-8 rounded-full text-lg transition-all duration-200 ease-in-out transform hover:-translate-y-px hover:shadow-xl w-full sm:w-auto">
-                🔍 Browse Ideas
+                Browse Ideas
               </Link>
               <Link to="/submit" className="bg-white dark:bg-gray-700 dark:hover:bg-gray-600 hover:bg-gray-100 text-gray-800 dark:text-gray-200 font-semibold py-4 px-8 rounded-full text-lg border-2 border-yellow-400 dark:border-yellow-500 transition-all duration-200 ease-in-out transform hover:-translate-y-px hover:shadow-xl w-full sm:w-auto">
-                💡 Submit Your Idea
+                Submit Your Idea
               </Link>
             </div>
           </div>
         </section>
 
-        {/* Stats Section */}
         <section className="py-16 bg-white dark:bg-gray-800">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
@@ -116,7 +115,6 @@ const LandingPage: React.FC = () => {
           </div>
         </section>
 
-        {/* Fresh from the Hive */}
         <section className="py-20 bg-yellow-50 dark:bg-gray-800/30">
           <div className="container mx-auto px-4">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-gray-100 text-center mb-4 font-playfair-display">
@@ -130,33 +128,30 @@ const LandingPage: React.FC = () => {
                 .sort((a, b) => getIdeaScore(b) - getIdeaScore(a))
                 .slice(0, 3)
                 .map((idea) => (
-                <Link to={`/idea/${idea.id}`} key={idea.id}>
-                  <IdeaCard
-                    key={idea.id}
-                    title={idea.title}
-                    problem={idea.problem}
-                    solution={idea.solution}
-                    category={idea.category}
-                    status={idea.status}
-                    score={getIdeaScore(idea)}
-                    upvotes={idea.upvotes}
-                    downvotes={idea.downvotes || 0}
-                    author={idea.authorName}
-                    featureImage={idea.featureImage}
-                  />
-                </Link>
-              ))}
+                  <Link to={`/idea/${idea.id}`} key={idea.id}>
+                    <IdeaCard
+                      title={idea.title}
+                      problem={idea.problem}
+                      solution={idea.solution}
+                      category={idea.category}
+                      status={idea.status}
+                      score={getIdeaScore(idea)}
+                      upvotes={idea.upvotes}
+                      downvotes={idea.downvotes || 0}
+                      author={idea.authorName}
+                      featureImage={idea.featureImage}
+                    />
+                  </Link>
+                ))}
             </div>
             <div className="text-center mt-12">
               <Link to="/browse" className="bg-yellow-400 hover:bg-yellow-500 text-gray-800 font-semibold py-3 px-6 rounded-full transition-all duration-200 ease-in-out transform hover:-translate-y-px hover:shadow-xl">
-                Browse All Ideas →
+                Browse All Ideas
               </Link>
             </div>
           </div>
         </section>
 
-
-        {/* How HiveMind Works Section */}
         <section className="py-20 bg-white dark:bg-gray-800">
           <div className="container mx-auto px-4">
             <div className="mx-auto mb-12 max-w-3xl text-center">
@@ -222,7 +217,6 @@ const LandingPage: React.FC = () => {
           </div>
         </section>
 
-        {/* Most Ideas Don't Die Section */}
         <section className="py-20 bg-yellow-50 dark:bg-gray-800/30">
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row items-center gap-12">
@@ -237,7 +231,7 @@ const LandingPage: React.FC = () => {
                   HiveMind is a public think tank built for people like you: dreamers, tinkerers, and creators with notebooks full of apps, inventions, and business ideas that never made it off the ground.
                 </p>
                 <p className="text-gray-600 dark:text-gray-300 mb-4">
-                  We're flipping the script. This is a digital idea commons — a space where thoughtful, unfinished, or even half-baked ideas can be shared openly for others to explore, build, and improve.
+                  We're flipping the script. This is a digital idea commons: a space where thoughtful, unfinished, or even half-baked ideas can be shared openly for others to explore, build, and improve.
                 </p>
                 <p className="text-gray-600 dark:text-gray-300 mb-8">
                   Because the best ideas deserve more than a dusty notebook. They deserve a chance to live.

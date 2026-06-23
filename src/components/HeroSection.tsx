@@ -9,7 +9,7 @@ const HeroSection = () => {
           Open-Source Idea Commons
         </h1>
         <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 mb-8">
-          Transform your unused ideas into collaborative projects. Share, discover, and build amazing things together.
+          Turn ideas into projects.
         </p>
 
         {/* Navigation Buttons */}
