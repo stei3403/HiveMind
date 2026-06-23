@@ -22,7 +22,7 @@ type Idea = {
   featureImage?: string;
 };
 
-const fullSubtitle = 'Turn ideas into projects.';
+const fullSubtitle = 'Turn unused ideas into projects people can build.';
 
 const LandingPage: React.FC = () => {
   const [ideas, setIdeas] = useState<Idea[]>([]);
@@ -59,14 +59,14 @@ const LandingPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    let i = 0;
+    let nextLength = 0;
     setSubtitle('');
     setSubtitleCursorVisible(true);
 
     const typingInterval = setInterval(() => {
-      if (i < fullSubtitle.length) {
-        setSubtitle(prev => prev + fullSubtitle.charAt(i));
-        i++;
+      if (nextLength < fullSubtitle.length) {
+        nextLength++;
+        setSubtitle(fullSubtitle.slice(0, nextLength));
       } else {
         clearInterval(typingInterval);
         setSubtitleCursorVisible(false);
@@ -87,11 +87,13 @@ const LandingPage: React.FC = () => {
             <h1 className="text-5xl md:text-7xl font-bold text-gray-800 dark:text-gray-100 mb-6 font-playfair-display">
               Where Ideas Find Their Wings
             </h1>
-            <p
-              className={`inline-block text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-full mx-auto mb-10 min-h-8 whitespace-nowrap overflow-hidden ${subtitleCursorVisible ? 'animate-typing-cursor border-r-2 border-transparent pr-1' : ''}`}
-              style={{ borderColor: subtitleCursorVisible ? 'currentColor' : 'transparent' }}
-            >
-              {subtitle}
+            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-10 min-h-14 md:min-h-8 leading-relaxed">
+              <span
+                className={`inline ${subtitleCursorVisible ? 'animate-typing-cursor border-r-2 border-transparent pr-1' : ''}`}
+                style={{ borderColor: subtitleCursorVisible ? 'currentColor' : 'transparent' }}
+              >
+                {subtitle}
+              </span>
             </p>
             <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
               <Link to="/browse" className="bg-yellow-400 hover:bg-yellow-500 text-gray-800 font-semibold py-4 px-8 rounded-full text-lg transition-all duration-200 ease-in-out transform hover:-translate-y-px hover:shadow-xl w-full sm:w-auto">
