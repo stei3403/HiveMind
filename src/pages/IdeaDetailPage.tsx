@@ -1,12 +1,15 @@
 
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
+import { useAuth } from '../context/AuthContext';
+import { IdeaRecord } from '../types/formTypes';
 
 const IdeaDetailPage: React.FC = () => {
   const { id } = useParams();
-  const [idea, setIdea] = useState<any>(null);
+  const { user, isAdmin } = useAuth();
+  const [idea, setIdea] = useState<IdeaRecord | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -16,7 +19,7 @@ const IdeaDetailPage: React.FC = () => {
         const docRef = doc(db, 'ideas', id);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
-          setIdea(docSnap.data());
+          setIdea({ id: docSnap.id, ...docSnap.data() } as IdeaRecord);
         } else {
           console.error('Idea not found');
         }
@@ -31,6 +34,7 @@ const IdeaDetailPage: React.FC = () => {
 
   if (loading) return <div className="text-center p-6">Loading...</div>;
   if (!idea) return <div className="text-center p-6 text-red-600">Idea not found.</div>;
+  const canEdit = !!user && (isAdmin || idea.authorUid === user.uid);
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8 text-gray-800 dark:text-white">
@@ -44,7 +48,17 @@ const IdeaDetailPage: React.FC = () => {
         }}
       />
 
-      <h1 className="text-3xl font-bold mb-2">{idea.title}</h1>
+      <div className="flex items-start justify-between gap-4 mb-2">
+        <h1 className="text-3xl font-bold">{idea.title}</h1>
+        {canEdit && id && (
+          <Link
+            to={`/idea/${id}/edit`}
+            className="px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white font-semibold rounded-md text-sm"
+          >
+            Edit
+          </Link>
+        )}
+      </div>
       <div className="text-sm text-gray-500 dark:text-gray-400 mb-4">{idea.status}</div>
 
       <div className="mb-4">
@@ -57,13 +71,13 @@ const IdeaDetailPage: React.FC = () => {
         <p>{idea.solution}</p>
       </div>
 
-      {idea.industry?.length > 0 && (
+      {(idea.industry?.length || 0) > 0 && (
         <div className="mb-4">
-          <p><strong>Industry:</strong> {idea.industry.join(', ')}</p>
+          <p><strong>Industry:</strong> {idea.industry?.join(', ')}</p>
         </div>
       )}
 
-      {idea.tags?.length > 0 && (
+      {(idea.tags?.length || 0) > 0 && (
         <div className="mb-4">
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Tags: {Array.isArray(idea.tags) ? idea.tags.join(", ") : "None"}
@@ -85,11 +99,11 @@ const IdeaDetailPage: React.FC = () => {
         </div>
       )}
 
-      {idea.images?.length > 1 && (
+      {(idea.images?.length || 0) > 1 && (
         <div className="mb-4">
           <p className="font-semibold mb-2">Gallery:</p>
           <div className="grid grid-cols-3 gap-4">
-            {idea.images.slice(1).map((url: string, idx: number) => (
+            {idea.images?.slice(1).map((url: string, idx: number) => (
               <img
                 key={idx}
                 src={url}
@@ -97,7 +111,7 @@ const IdeaDetailPage: React.FC = () => {
                 className="w-full h-24 object-cover rounded-md"
                 onError={(e) => {
                   e.currentTarget.onerror = null;
-                  e.currentTarget.src = '/A_placeholder_digital_graphic_design_features_a_me.png';
+                  e.currentTarget.src = '/No Image Available Placeholder.png';
                 }}
               />
             ))}

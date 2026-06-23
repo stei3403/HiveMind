@@ -51,9 +51,33 @@ The new `LandingPage.tsx` already uses `font-playfair-display` for relevant text
 
 ## Running the Project
 
-(Instructions on how to run the project - you can fill this in)
+Use Node.js `24.17.0` for local development. The Firebase Functions deployment runtime is Node `22`, because that is the current supported Firebase runtime line for this project.
 
 ```bash
 npm install
 npm run dev
 ``` 
+
+## Quality Checks
+
+```bash
+npm run typecheck
+npm run build
+npm --prefix functions run build
+```
+
+## Environment Variables
+
+Copy `.env.example` to `.env.local` and fill in the Firebase web app values.
+Set `VITE_OPENAI_AUTOFILL_URL` only when you need to point the frontend at a non-default OpenAI autofill function.
+
+## Idea Imports
+
+The import workflow lives in `functions/scripts/importIdeas.js` and reads JSON arrays shaped like `data/ideas.example.json`.
+The default script is a dry run:
+
+```bash
+npm --prefix functions run import:ideas
+```
+
+To import a different file, pass the file path after `--`. Remove `--dry-run` only when Firebase Admin credentials are configured and you are ready to write to Firestore.

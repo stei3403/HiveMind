@@ -1,11 +1,12 @@
 {
   "engines": {
-    "node": "20"
+    "node": "22"
   },
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc",
-    "lint": "eslint --ext .js,.ts ."
+    "lint": "eslint --ext .js,.ts .",
+    "import:ideas": "node scripts/importIdeas.js ../data/ideas.example.json --dry-run"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -14,7 +15,7 @@
     "openai": "^4.0.0"
   },
   "devDependencies": {
-    "@types/node": "^18.0.0",
+    "@types/node": "^22.20.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "eslint": "^8.0.0",

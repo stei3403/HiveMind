@@ -11,6 +11,7 @@ import ThankYouPage from './pages/ThankYouPage';
 import ProtectedRoute from './routes/ProtectedRoute';
 import { Toaster } from 'react-hot-toast';
 import IdeaDetailPage from './pages/IdeaDetailPage';
+import IdeaEditPage from './pages/IdeaEditPage';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/thanks" element={<ThankYouPage />} />  
         <Route path="/idea/:id" element={<IdeaDetailPage />} />
+        <Route path="/idea/:id/edit" element={<ProtectedRoute><IdeaEditPage /></ProtectedRoute>} />
       </Routes>
       <Toaster position="top-right" />
       {/* Footer is part of LandingPage, but might be needed globally for other pages */}

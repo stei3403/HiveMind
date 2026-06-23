@@ -1,0 +1,108 @@
+[
+  {
+    "title": "Unpacked",
+    "problem": "Travelers often overpack, pay checked-bag fees, stress over outfit planning, and return home with laundry they do not want to handle. Many also buy vacation outfits they may only wear once, while sustainable fashion options remain inconvenient during travel.",
+    "solution": "Unpacked places clothing rental kiosks in hotels, resorts, and cruise ships so vacationers can pack lighter and access fresh, stylish travel outfits on arrival. Guests can reserve looks before the trip or choose items on-site, then return everything to the kiosk before departure.",
+    "status": "Researching",
+    "authorName": "Gabe Steiner",
+    "industry": [
+      "Travel",
+      "Fashion",
+      "Hospitality",
+      "Sustainability"
+    ],
+    "businessModel": "Core revenue comes from daily and weekly outfit rentals, bundled vacation packages, premium pre-order styling, room-delivery convenience fees, and add-on accessory rentals. Additional revenue can come from late/lost/damaged item fees, a buy-it option for guests who want to keep items, sustainable fashion brand sponsorships, hotel/resort commission splits or kiosk leases, and a future JetSet Club subscription for frequent travelers.",
+    "targetAudience": "Vacationers who want to pack light, avoid checked-bag fees, skip post-trip laundry, and access stylish resortwear without buying one-time-use outfits.",
+    "whyNow": "Airline baggage fees, social-media-driven travel wardrobes, sustainability pressure, and hotel/cruise digitization create a strong opening for convenient destination-based apparel rental.",
+    "features": [
+      "Hotel, resort, and cruise ship rental kiosks",
+      "Pre-trip outfit reservations",
+      "On-site browsing and checkout",
+      "Ready-in-room delivery at partner properties",
+      "Accessory rentals for hats, purses, jewelry, sunglasses, and shoes",
+      "Easy kiosk returns before departure",
+      "Loved it, buy it purchase option"
+    ],
+    "tags": [
+      "travel",
+      "fashion rental",
+      "hospitality",
+      "sustainable fashion",
+      "kiosks",
+      "vacation"
+    ]
+  },
+  {
+    "title": "StrollOn",
+    "problem": "Parents traveling with young children often have to lug bulky strollers through airports, gate-check them, wait for them after landing, or risk delays, damage, and lost gear. Strollers also take up trunk and luggage space, and there is no convenient one-way rental system that works across airports, hotels, theme parks, and multi-leg trips.",
+    "solution": "StrollOn offers on-demand stroller rentals at airports and travel hubs. Parents can reserve or unlock a clean, quality stroller from a kiosk, use it throughout the trip for flights, hotels, Ubers, attractions, and theme parks, then return it at any participating location.",
+    "status": "Researching",
+    "authorName": "Gabe Steiner",
+    "industry": [
+      "Travel",
+      "Family Tech",
+      "Hospitality",
+      "Baby Gear",
+      "Logistics"
+    ],
+    "businessModel": "Revenue comes from hourly, daily, and weekly stroller rentals, monthly subscriptions for frequent family travelers, add-ons such as sunshades, snack trays, weather covers, double strollers, and newborn inserts, plus loss or damage fees. Additional revenue can come from baby gear brand partnerships, affiliate sales, and white-labeled stroller rental programs for airports, airlines, hotels, resorts, and theme parks.",
+    "targetAudience": "Parents and caregivers traveling with babies or young children, especially families flying through major airports, visiting resorts or theme parks, or taking multi-leg trips where bringing a stroller is stressful.",
+    "whyNow": "Family travel is growing, airports and resorts are investing in better passenger experiences, and parents increasingly expect app-based convenience. One-way rental behavior is already familiar from car rentals, bikes, scooters, lockers, and luggage services, but stroller rentals remain fragmented and destination-bound.",
+    "features": [
+      "Airport and travel-hub stroller kiosks",
+      "App or website reservations",
+      "On-site stroller unlock",
+      "One-way returns at partner locations",
+      "Hourly, daily, and weekly rental options",
+      "Double strollers and newborn inserts",
+      "RFID or GPS inventory tracking",
+      "Regular cleaning and quality checks",
+      "Add-on rentals for sunshades, snack trays, and weather covers"
+    ],
+    "tags": [
+      "family travel",
+      "stroller rental",
+      "airport tech",
+      "baby gear",
+      "travel logistics",
+      "hospitality"
+    ]
+  },
+  {
+    "title": "PatternAlert",
+    "problem": "Private airport and grass airstrip owners often have limited visibility into nearby aircraft activity when they are away from the field, not watching a flight-tracking app, not monitoring radios, or simply not looking outside. Existing ADS-B tools are strong for active tracking, but they are not built around passive, airstrip-specific alerts for small private airports, creating a gap for owners who want timely awareness when aircraft approach, overfly, circle, or potentially land at their property.",
+    "solution": "PatternAlert is a lightweight aircraft proximity alerting service for private airport owners. Users define an airstrip location, alert radius, and altitude threshold, then PatternAlert monitors ADS-B aircraft data around that location and sends email alerts when aircraft enter the configured alert window. It is designed as an advisory situational-awareness tool, not a replacement for ATC, radio monitoring, visual scanning, or certified aviation safety systems.",
+    "status": "Currently Building",
+    "authorName": "Gabe Steiner",
+    "industry": [
+      "Aviation",
+      "Private Airports",
+      "General Aviation",
+      "Airstrip Operations",
+      "SaaS"
+    ],
+    "businessModel": "PatternAlert can be sold as a monthly or annual subscription per monitored airstrip, with optional additional alert recipients per airstrip. Higher tiers can support multiple airstrips, higher polling frequency, SMS alerts, alert history, reporting, and advanced admin tools. The beta should stay small while validating alert quality, data costs, and commercial ADS-B data arrangements. Long-term margins depend on efficient data ingestion, batching nearby monitored areas, and negotiating provider agreements that avoid excessive per-airstrip polling costs.",
+    "targetAudience": "Private airport owners, grass strip owners, residential airparks, farm strips, flying clubs, small aviation communities, and property owners who want passive awareness of aircraft activity near a specific airstrip.",
+    "whyNow": "ADS-B data is increasingly accessible, private airstrip owners are more comfortable with lightweight web tools, and low-cost alerting infrastructure makes passive monitoring practical. The opportunity is in turning raw aircraft tracking data into a simple owner-focused workflow: set an airstrip, choose radius and altitude thresholds, and receive timely alerts without watching a map all day.",
+    "features": [
+      "Invite/login-based web app",
+      "Airstrip setup by airport lookup or manual coordinates",
+      "Configurable alert radius",
+      "Configurable altitude threshold",
+      "Email alerts with aircraft details and tracking links",
+      "Admin dashboard for users and invites",
+      "Polling status and provider usage visibility",
+      "Cost monitoring for aircraft data usage",
+      "Future SMS alerts and advanced history/reporting"
+    ],
+    "tags": [
+      "aviation",
+      "private airports",
+      "grass airstrips",
+      "general aviation",
+      "ADS-B",
+      "aircraft alerts",
+      "situational awareness"
+    ]
+  }
+]
