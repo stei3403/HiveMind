@@ -1,10 +1,12 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const Navbar: React.FC = () => {
-  const { user, logout } = useAuth();
-
+  const { user, logout, isAdmin } = useAuth();
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [theme, setTheme] = useState(() => {
     const storedTheme = localStorage.getItem('theme');
     if (storedTheme) return storedTheme;
@@ -13,10 +15,6 @@ const Navbar: React.FC = () => {
     }
     return 'light';
   });
-
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const root = window.document.documentElement;
@@ -30,63 +28,34 @@ const Navbar: React.FC = () => {
         setDropdownOpen(false);
       }
     };
+
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const toggleTheme = () => {
-    setTheme(prev => (prev === 'light' ? 'dark' : 'light'));
-  };
-
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
+  const closeMenus = () => {
+    setIsMobileMenuOpen(false);
+    setDropdownOpen(false);
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/98 dark:bg-gray-900/95 shadow-sm backdrop-blur-md">
-      <div className="container mx-auto px-4 h-20 flex items-center justify-between">
-        <Link to="/" className="flex items-center space-x-3">
-          <span className="text-3xl">🍯</span>
+    <nav className="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 shadow-sm backdrop-blur-md">
+      <div className="container mx-auto px-4 h-20 flex items-center justify-between gap-4">
+        <Link to="/" className="flex items-center gap-3" onClick={closeMenus}>
+          <img src="/hive.png" alt="" className="h-9 w-9 rounded-md object-cover" />
           <span className="text-2xl font-bold text-gray-800 dark:text-white">HiveMind</span>
         </Link>
 
-        <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
-          <Link to="/browse" className="text-gray-600 dark:text-gray-300 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors">Browse Ideas</Link>
-          <Link to="/submit" className="text-gray-600 dark:text-gray-300 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors">Submit Idea</Link>
-          <Link to="/#how-it-works" className="text-gray-600 dark:text-gray-300 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors">How it Works</Link>
-          <Link to="/#community" className="text-gray-600 dark:text-gray-300 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors">Community</Link>
+        <div className="hidden md:flex items-center gap-7">
+          <Link to="/browse" className="text-gray-600 dark:text-gray-300 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors">Browse</Link>
+          <Link to="/submit" className="text-gray-600 dark:text-gray-300 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors">Submit</Link>
+          <Link to="/how-it-works" className="text-gray-600 dark:text-gray-300 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors">How it Works</Link>
         </div>
-          {user ? (
-                      <div className="relative" ref={dropdownRef}>
-                        <button onClick={() => setDropdownOpen(!dropdownOpen)} className="focus:outline-none">
-                          <img
-                            src={user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName || user.email || 'User'}`}
-                            alt="avatar"
-                            className="w-8 h-8 rounded-full border border-gray-300 shadow-sm"
-                          />
-                        </button>
-                        {dropdownOpen && (
-                          <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50 py-2 text-sm">
-                            <Link to="/settings" className="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                              Settings
-                            </Link>
-                            <Link to="/my-ideas" className="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
-                              My Ideas
-                            </Link>
-                            <button onClick={logout} className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-gray-700">
-                              Logout
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      <Link to="/submit" className="bg-yellow-400 hover:bg-yellow-500 text-white px-4 py-2 rounded-full font-semibold shadow">
-                        Get Started
-                      </Link>
-                    )}
-        <div className="flex items-center space-x-3">
+
+        <div className="flex items-center gap-3">
           <button
-            onClick={toggleTheme}
+            type="button"
+            onClick={() => setTheme(prev => (prev === 'light' ? 'dark' : 'light'))}
             className="text-gray-600 dark:text-gray-300 hover:text-yellow-500 dark:hover:text-yellow-400 p-2 rounded-full transition-colors focus:outline-none"
             aria-label="Toggle theme"
           >
@@ -101,35 +70,79 @@ const Navbar: React.FC = () => {
             )}
           </button>
 
-          <div className="md:hidden">
-            <button 
-              onClick={toggleMobileMenu}
-              className="text-gray-800 dark:text-gray-200 focus:outline-none p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
-              aria-label="Toggle mobile menu"
-            >
-              {isMobileMenuOpen ? (
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              ) : (
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
-                </svg>
+          {user ? (
+            <div className="relative" ref={dropdownRef}>
+              <button
+                type="button"
+                onClick={() => setDropdownOpen(prev => !prev)}
+                className="focus:outline-none"
+                aria-label="Open user menu"
+              >
+                <img
+                  src={user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName || user.email || 'User'}`}
+                  alt=""
+                  className="w-9 h-9 rounded-full border border-gray-300 shadow-sm"
+                />
+              </button>
+              {dropdownOpen && (
+                <div className="absolute right-0 mt-2 w-44 bg-white dark:bg-gray-800 rounded-md shadow-lg z-50 py-2 text-sm">
+                  <Link
+                    to="/my-ideas"
+                    onClick={closeMenus}
+                    className="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                  >
+                    {isAdmin ? 'Manage Ideas' : 'My Ideas'}
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      closeMenus();
+                      logout();
+                    }}
+                    className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-gray-700"
+                  >
+                    Logout
+                  </button>
+                </div>
               )}
-            </button>
-          </div>
+            </div>
+          ) : (
+            <Link to="/login" className="hidden sm:inline-flex bg-yellow-400 hover:bg-yellow-500 text-white px-4 py-2 rounded-md font-semibold shadow">
+              Log In
+            </Link>
+          )}
+
+          <button
+            type="button"
+            onClick={() => setIsMobileMenuOpen(prev => !prev)}
+            className="md:hidden text-gray-800 dark:text-gray-200 focus:outline-none p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+            aria-label="Toggle mobile menu"
+          >
+            {isMobileMenuOpen ? (
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
+              </svg>
+            )}
+          </button>
         </div>
       </div>
 
       {isMobileMenuOpen && (
         <div className="md:hidden bg-white dark:bg-gray-900 py-3 px-4 border-t border-gray-200 dark:border-gray-700">
-          <Link to="/browse" className="block py-2 px-3 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800" onClick={toggleMobileMenu}>Browse Ideas</Link>
-          <Link to="/#how-it-works" className="block py-2 px-3 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800" onClick={toggleMobileMenu}>How it Works</Link>
-          <Link to="/submit" className="block py-2 px-3 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800" onClick={toggleMobileMenu}>Submit Idea</Link>
-          <Link to="/#community" className="block py-2 px-3 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800" onClick={toggleMobileMenu}>Community</Link>
-          {!user && (
-            <Link to="/login" className="block w-full mt-3 bg-yellow-400 hover:bg-yellow-500 text-gray-800 font-semibold py-3 px-4 rounded-md text-center transition-colors" onClick={toggleMobileMenu}>
-              Get Started
+          <Link to="/browse" className="block py-2 px-3 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800" onClick={closeMenus}>Browse</Link>
+          <Link to="/submit" className="block py-2 px-3 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800" onClick={closeMenus}>Submit</Link>
+          <Link to="/how-it-works" className="block py-2 px-3 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800" onClick={closeMenus}>How it Works</Link>
+          {user ? (
+            <Link to="/my-ideas" className="block py-2 px-3 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800" onClick={closeMenus}>
+              {isAdmin ? 'Manage Ideas' : 'My Ideas'}
+            </Link>
+          ) : (
+            <Link to="/login" className="block w-full mt-3 bg-yellow-400 hover:bg-yellow-500 text-white font-semibold py-3 px-4 rounded-md text-center transition-colors" onClick={closeMenus}>
+              Log In
             </Link>
           )}
         </div>

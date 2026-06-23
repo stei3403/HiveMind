@@ -12,6 +12,8 @@ import ProtectedRoute from './routes/ProtectedRoute';
 import { Toaster } from 'react-hot-toast';
 import IdeaDetailPage from './pages/IdeaDetailPage';
 import IdeaEditPage from './pages/IdeaEditPage';
+import MyIdeasPage from './pages/MyIdeasPage';
+import HowItWorksPage from './pages/HowItWorksPage';
 
 function App() {
   return (
@@ -21,8 +23,10 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/submit" element={<ProtectedRoute><SubmitPage /></ProtectedRoute >} />
         <Route path="/browse" element={<BrowsePage />} />
+        <Route path="/how-it-works" element={<HowItWorksPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/thanks" element={<ThankYouPage />} />  
+        <Route path="/my-ideas" element={<ProtectedRoute><MyIdeasPage /></ProtectedRoute>} />
         <Route path="/idea/:id" element={<IdeaDetailPage />} />
         <Route path="/idea/:id/edit" element={<ProtectedRoute><IdeaEditPage /></ProtectedRoute>} />
       </Routes>
