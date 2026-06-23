@@ -8,7 +8,7 @@ import { IdeaRecord } from '../types/formTypes';
 
 const IdeaDetailPage: React.FC = () => {
   const { id } = useParams();
-  const { user, isAdmin } = useAuth();
+  const { user, isAdmin, loading: authLoading } = useAuth();
   const [idea, setIdea] = useState<IdeaRecord | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -32,7 +32,7 @@ const IdeaDetailPage: React.FC = () => {
     fetchIdea();
   }, [id]);
 
-  if (loading) return <div className="text-center p-6">Loading...</div>;
+  if (loading || authLoading) return <div className="text-center p-6">Loading...</div>;
   if (!idea) return <div className="text-center p-6 text-red-600">Idea not found.</div>;
   const canEdit = !!user && (isAdmin || idea.authorUid === user.uid);
 
@@ -50,16 +50,18 @@ const IdeaDetailPage: React.FC = () => {
 
       <div className="flex items-start justify-between gap-4 mb-2">
         <h1 className="text-3xl font-bold">{idea.title}</h1>
+      </div>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+        <div className="text-sm text-gray-500 dark:text-gray-400">{idea.status}</div>
         {canEdit && id && (
           <Link
             to={`/idea/${id}/edit`}
-            className="px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white font-semibold rounded-md text-sm"
+            className="inline-flex justify-center px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white font-semibold rounded-md text-sm"
           >
-            Edit
+            Edit Idea
           </Link>
         )}
       </div>
-      <div className="text-sm text-gray-500 dark:text-gray-400 mb-4">{idea.status}</div>
 
       <div className="mb-4">
         <p><strong>Problem:</strong></p>
