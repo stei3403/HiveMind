@@ -69,7 +69,6 @@ npm --prefix functions run build
 ## Environment Variables
 
 Copy `.env.example` to `.env.local` and fill in the Firebase web app values.
-Set `VITE_OPENAI_AUTOFILL_URL` only when you need to point the frontend at a non-default OpenAI autofill function.
 
 ## Idea Imports
 

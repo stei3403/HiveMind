@@ -23,7 +23,9 @@ export interface IdeaFormData {
   tags?: string[];
   images?: string[];
   featureImage?: string;
-  aiHelpAccepted?: boolean;
+  downvotes?: number;
+  score?: number;
+  adminScoreAdjustment?: number;
 }
 
 export interface IdeaRecord extends IdeaFormData {

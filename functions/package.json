@@ -9,10 +9,8 @@
     "import:ideas": "node scripts/importIdeas.js ../data/ideas.example.json --dry-run"
   },
   "dependencies": {
-    "cors": "^2.8.5",
     "firebase-admin": "^11.0.0",
-    "firebase-functions": "^6.3.2",
-    "openai": "^4.0.0"
+    "firebase-functions": "^6.3.2"
   },
   "devDependencies": {
     "@types/node": "^22.20.0",

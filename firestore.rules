@@ -33,6 +33,31 @@ service cloud.firestore {
           request.resource.data[field].size() <= maxLength);
     }
 
+    function optionalInt(field) {
+      return !request.resource.data.keys().hasAny([field]) ||
+        request.resource.data[field] is int;
+    }
+
+    function stableIntField(field, fallback) {
+      return (
+        !request.resource.data.keys().hasAny([field]) &&
+        !resource.data.keys().hasAny([field])
+      ) || (
+        request.resource.data.keys().hasAny([field]) &&
+        request.resource.data[field] ==
+          (resource.data.keys().hasAny([field]) ? resource.data[field] : fallback)
+      );
+    }
+
+    function stableVoteFieldsForNonAdmins() {
+      return isAdmin() || (
+        stableIntField('upvotes', 0) &&
+        stableIntField('downvotes', 0) &&
+        stableIntField('adminScoreAdjustment', 0) &&
+        stableIntField('score', 0)
+      );
+    }
+
     function validIdeaFields() {
       return request.resource.data.keys().hasOnly([
         'title',
@@ -53,6 +78,9 @@ service cloud.firestore {
         'images',
         'featureImage',
         'upvotes',
+        'downvotes',
+        'score',
+        'adminScoreAdjustment',
         'createdAt',
         'updatedAt'
       ]);
@@ -74,6 +102,9 @@ service cloud.firestore {
         request.resource.data.authorName.size() <= 120 &&
         request.resource.data.authorUid is string &&
         request.resource.data.upvotes is int &&
+        optionalInt('downvotes') &&
+        optionalInt('score') &&
+        optionalInt('adminScoreAdjustment') &&
         optionalString('links', 1000) &&
         optionalString('marketSize', 1000) &&
         optionalString('businessModel', 2000) &&
@@ -111,15 +142,24 @@ service cloud.firestore {
         validIdeaShape() &&
         request.resource.data.authorUid == request.auth.uid &&
         request.resource.data.upvotes == 0 &&
+        (!request.resource.data.keys().hasAny(['downvotes']) || request.resource.data.downvotes == 0) &&
+        (!request.resource.data.keys().hasAny(['adminScoreAdjustment']) || request.resource.data.adminScoreAdjustment == 0) &&
+        (!request.resource.data.keys().hasAny(['score']) || request.resource.data.score == 0) &&
         request.resource.data.createdAt == request.time;
       allow update: if signedIn() &&
         validIdeaShape() &&
         resource.data.authorUid == request.resource.data.authorUid &&
         resource.data.createdAt == request.resource.data.createdAt &&
         request.resource.data.updatedAt == request.time &&
+        stableVoteFieldsForNonAdmins() &&
         (resource.data.authorUid == request.auth.uid || isAdmin());
       allow delete: if signedIn() &&
         (resource.data.authorUid == request.auth.uid || isAdmin());
+
+      match /votes/{userId} {
+        allow read: if signedIn() && (userId == request.auth.uid || isAdmin());
+        allow write: if false;
+      }
     }
 
     match /users/{userId} {

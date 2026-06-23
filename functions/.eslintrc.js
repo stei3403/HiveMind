@@ -22,6 +22,7 @@ module.exports = {
     ".eslintrc.js",         // <-- prevent eslint from linting itself
     "/lib/**/*",            // ignore built files
     "/generated/**/*",      // ignore generated files
+    "/scripts/**/*",        // local maintenance scripts are not deployed functions
   ],
   plugins: [
     "@typescript-eslint",

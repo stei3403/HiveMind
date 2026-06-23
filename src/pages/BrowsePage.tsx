@@ -4,6 +4,7 @@ import { db } from '../firebase';
 import IdeaCard from '../components/IdeaCard';
 import { Link } from 'react-router-dom';
 import { IdeaRecord, IdeaStatus } from '../types/formTypes';
+import { getIdeaScore } from '../services/votes';
 
 const statusOptions: IdeaStatus[] = [
   'Just an Idea',
@@ -73,9 +74,9 @@ const BrowsePage = () => {
       updatedIdeas = updatedIdeas.filter(idea => idea.status === selectedStatus);
     }
 
-    // Sort by upvotes
+    // Sort by score
     updatedIdeas.sort((a, b) =>
-      sortDescending ? (b.upvotes || 0) - (a.upvotes || 0) : (a.upvotes || 0) - (b.upvotes || 0)
+      sortDescending ? getIdeaScore(b) - getIdeaScore(a) : getIdeaScore(a) - getIdeaScore(b)
     );
 
     setFilteredIdeas(updatedIdeas);
@@ -141,7 +142,7 @@ const BrowsePage = () => {
             onClick={() => setSortDescending(prev => !prev)}
             className="px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white font-semibold rounded-full"
           >
-            Sort by Upvotes {sortDescending ? '↓' : '↑'}
+            Sort by Score {sortDescending ? 'Down' : 'Up'}
           </button>
         </div>
       </div>
@@ -156,7 +157,9 @@ const BrowsePage = () => {
               solution={idea.solution || ''}
               category={idea.tags?.[0] || ''}
               status={idea.status || 'Just an Idea'}
+              score={getIdeaScore(idea)}
               upvotes={idea.upvotes || 0}
+              downvotes={idea.downvotes || 0}
               author={idea.authorName || 'Anonymous'}
               featureImage={idea.featureImage}
             />

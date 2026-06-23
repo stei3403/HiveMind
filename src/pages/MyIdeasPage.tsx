@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
 import { IdeaRecord } from '../types/formTypes';
+import { getIdeaScore } from '../services/votes';
 
 const formatDate = (value: unknown) => {
   if (!value) return 'Unknown';
@@ -91,8 +92,9 @@ const MyIdeasPage: React.FC = () => {
         </div>
       ) : (
         <div className="overflow-hidden rounded-md border border-gray-200 dark:border-gray-700">
-          <div className="hidden md:grid grid-cols-[1fr_10rem_10rem_9rem] gap-4 bg-gray-50 dark:bg-gray-800 px-4 py-3 text-sm font-semibold">
+          <div className="hidden md:grid grid-cols-[1fr_8rem_10rem_10rem_9rem] gap-4 bg-gray-50 dark:bg-gray-800 px-4 py-3 text-sm font-semibold">
             <span>Idea</span>
+            <span>Score</span>
             <span>Status</span>
             <span>Created</span>
             <span className="text-right">Actions</span>
@@ -100,7 +102,7 @@ const MyIdeasPage: React.FC = () => {
 
           <div className="divide-y divide-gray-200 dark:divide-gray-700">
             {visibleIdeas.map(idea => (
-              <div key={idea.id} className="grid grid-cols-1 md:grid-cols-[1fr_10rem_10rem_9rem] gap-3 px-4 py-4">
+              <div key={idea.id} className="grid grid-cols-1 md:grid-cols-[1fr_8rem_10rem_10rem_9rem] gap-3 px-4 py-4">
                 <div className="min-w-0">
                   <Link to={`/idea/${idea.id}`} className="font-semibold hover:text-yellow-500">
                     {idea.title || 'Untitled idea'}
@@ -112,6 +114,15 @@ const MyIdeasPage: React.FC = () => {
                     <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
                       {idea.authorName || 'Anonymous'}
                     </p>
+                  )}
+                </div>
+
+                <div className="text-sm text-gray-700 dark:text-gray-200">
+                  {getIdeaScore(idea)}
+                  {isAdmin && (idea.adminScoreAdjustment || 0) !== 0 && (
+                    <span className="ml-1 text-xs text-blue-600 dark:text-blue-300">
+                      ({idea.adminScoreAdjustment && idea.adminScoreAdjustment > 0 ? '+' : ''}{idea.adminScoreAdjustment})
+                    </span>
                   )}
                 </div>
 

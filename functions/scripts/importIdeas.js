@@ -81,6 +81,9 @@ function validateIdea(rawIdea, index) {
     authorName: asTrimmedString(rawIdea.authorName, "authorName", 120) || "HiveMind Admin",
     authorUid: asTrimmedString(rawIdea.authorUid, "authorUid", 128) || "admin-import",
     upvotes: 0,
+    downvotes: 0,
+    score: 0,
+    adminScoreAdjustment: 0,
     createdAt: admin.firestore.FieldValue.serverTimestamp(),
   };
 

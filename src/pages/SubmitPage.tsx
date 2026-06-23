@@ -27,6 +27,9 @@ const SubmitPage: React.FC = () => {
         authorUid: user.uid,
         status: data.status || 'Just an Idea',
         upvotes: 0,
+        downvotes: 0,
+        score: 0,
+        adminScoreAdjustment: 0,
         createdAt: serverTimestamp(),
       });
 

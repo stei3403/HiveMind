@@ -46,6 +46,11 @@ const IdeaEditPage: React.FC = () => {
     setSaving(true);
 
     try {
+      const upvotes = idea.upvotes || 0;
+      const downvotes = idea.downvotes || 0;
+      const adminScoreAdjustment = isAdmin ? data.adminScoreAdjustment || 0 : idea.adminScoreAdjustment || 0;
+      const nextScore = upvotes - downvotes + adminScoreAdjustment;
+
       await updateDoc(doc(db, 'ideas', id), {
         title: data.title || '',
         problem: data.problem || '',
@@ -63,6 +68,10 @@ const IdeaEditPage: React.FC = () => {
         tags: data.tags || [],
         images: data.images || [],
         featureImage: data.featureImage || '',
+        upvotes,
+        downvotes,
+        adminScoreAdjustment,
+        score: nextScore,
         updatedAt: serverTimestamp(),
       });
 
@@ -97,6 +106,7 @@ const IdeaEditPage: React.FC = () => {
         submitLabel="Save Changes"
         savingLabel="Saving..."
         saving={saving}
+        showAdminControls={isAdmin}
         onCancel={() => navigate(`/idea/${id}`)}
         onSubmit={handleSave}
       />

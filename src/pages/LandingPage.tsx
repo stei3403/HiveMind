@@ -5,6 +5,7 @@ import IdeaCard from '../components/IdeaCard';
 import FinalCallToAction from '../components/FinalCallToAction';
 import Footer from '../components/Footer';
 import { Link } from 'react-router-dom';
+import { getIdeaScore } from '../services/votes';
 
 // Type definition for idea
 type Idea = {
@@ -15,6 +16,9 @@ type Idea = {
   category: string;
   status: string;
   upvotes: number;
+  downvotes?: number;
+  score?: number;
+  adminScoreAdjustment?: number;
   authorName: string;
   featureImage?: string;
 };
@@ -39,6 +43,9 @@ const LandingPage: React.FC = () => {
             category: data.category || 'General',
             status: data.status || 'Just an Idea',
             upvotes: data.upvotes || 0,
+            downvotes: data.downvotes || 0,
+            score: data.score,
+            adminScoreAdjustment: data.adminScoreAdjustment || 0,
             authorName: data.authorName || 'Anonymous',
             featureImage: data.featureImage || '',
           };
@@ -120,7 +127,7 @@ const LandingPage: React.FC = () => {
             </p>
             <div className="grid md:grid-cols-3 gap-8">
               {[...ideas]
-                .sort((a, b) => b.upvotes - a.upvotes)
+                .sort((a, b) => getIdeaScore(b) - getIdeaScore(a))
                 .slice(0, 3)
                 .map((idea) => (
                 <Link to={`/idea/${idea.id}`} key={idea.id}>
@@ -131,7 +138,9 @@ const LandingPage: React.FC = () => {
                     solution={idea.solution}
                     category={idea.category}
                     status={idea.status}
+                    score={getIdeaScore(idea)}
                     upvotes={idea.upvotes}
+                    downvotes={idea.downvotes || 0}
                     author={idea.authorName}
                     featureImage={idea.featureImage}
                   />

@@ -35,6 +35,7 @@ type IdeaFormProps = {
   submitLabel: string;
   savingLabel?: string;
   saving?: boolean;
+  showAdminControls?: boolean;
   onCancel?: () => void;
   onSubmit: (data: IdeaFormData) => Promise<void>;
 };
@@ -46,6 +47,7 @@ const IdeaForm: React.FC<IdeaFormProps> = ({
   submitLabel,
   savingLabel = 'Saving...',
   saving = false,
+  showAdminControls = false,
   onCancel,
   onSubmit,
 }) => {
@@ -56,7 +58,7 @@ const IdeaForm: React.FC<IdeaFormProps> = ({
 
   const images = useMemo(() => idea.images || [], [idea.images]);
 
-  const updateField = (field: keyof IdeaFormData, value: string | string[]) => {
+  const updateField = (field: keyof IdeaFormData, value: string | string[] | number) => {
     setIdea(prev => normalizeIdea({ ...prev, [field]: value }));
   };
 
@@ -398,6 +400,24 @@ const IdeaForm: React.FC<IdeaFormProps> = ({
               ))}
             </div>
           </section>
+
+          {showAdminControls && (
+            <section className="space-y-3 rounded-md border border-blue-200 dark:border-blue-900 bg-blue-50 dark:bg-blue-950/30 p-4">
+              <h2 className="text-lg font-semibold">Admin ranking</h2>
+              <label className="block">
+                <span className="block text-sm font-semibold mb-1">Score adjustment</span>
+                <input
+                  type="number"
+                  value={idea.adminScoreAdjustment || 0}
+                  onChange={event => updateField('adminScoreAdjustment', Number(event.target.value) || 0)}
+                  className="w-full border rounded-md px-3 py-2 dark:bg-gray-800 dark:border-gray-700"
+                />
+              </label>
+              <p className="text-xs text-gray-600 dark:text-gray-300">
+                Use this to move beta cards up or down without changing real votes.
+              </p>
+            </section>
+          )}
 
           <div className="sticky top-24 space-y-3 pt-2">
             <button
