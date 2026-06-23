@@ -39,24 +39,24 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 shadow-sm backdrop-blur-md">
+    <nav className="sticky top-0 z-50 border-b border-yellow-500/40 bg-yellow-400/95 shadow-sm backdrop-blur-md dark:border-yellow-700/70 dark:bg-gray-950/95">
       <div className="container mx-auto px-4 h-20 flex items-center justify-between gap-4">
         <Link to="/" className="flex items-center gap-3" onClick={closeMenus}>
           <img src="/hive.png" alt="" className="h-9 w-9 rounded-md object-cover" />
-          <span className="text-2xl font-bold text-gray-800 dark:text-white">HiveMind</span>
+          <span className="text-2xl font-bold text-gray-950 dark:text-white">HiveMind</span>
         </Link>
 
         <div className="hidden md:flex items-center gap-7">
-          <Link to="/browse" className="text-gray-600 dark:text-gray-300 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors">Browse</Link>
-          <Link to="/submit" className="text-gray-600 dark:text-gray-300 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors">Submit</Link>
-          <Link to="/how-it-works" className="text-gray-600 dark:text-gray-300 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors">How it Works</Link>
+          <Link to="/browse" className="font-semibold text-gray-900 hover:text-gray-700 dark:text-gray-200 dark:hover:text-yellow-300 transition-colors">Browse</Link>
+          <Link to="/submit" className="font-semibold text-gray-900 hover:text-gray-700 dark:text-gray-200 dark:hover:text-yellow-300 transition-colors">Submit</Link>
+          <Link to="/how-it-works" className="font-semibold text-gray-900 hover:text-gray-700 dark:text-gray-200 dark:hover:text-yellow-300 transition-colors">How it Works</Link>
         </div>
 
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={() => setTheme(prev => (prev === 'light' ? 'dark' : 'light'))}
-            className="text-gray-600 dark:text-gray-300 hover:text-yellow-500 dark:hover:text-yellow-400 p-2 rounded-full transition-colors focus:outline-none"
+            className="text-gray-900 hover:bg-yellow-300/70 dark:text-gray-200 dark:hover:bg-gray-800 p-2 rounded-full transition-colors focus:outline-none"
             aria-label="Toggle theme"
           >
             {theme === 'dark' ? (
@@ -107,7 +107,7 @@ const Navbar: React.FC = () => {
               )}
             </div>
           ) : (
-            <Link to="/login" className="hidden sm:inline-flex bg-yellow-400 hover:bg-yellow-500 text-white px-4 py-2 rounded-md font-semibold shadow">
+            <Link to="/login" className="hidden sm:inline-flex bg-gray-950 hover:bg-gray-800 text-white px-4 py-2 rounded-md font-semibold shadow dark:bg-yellow-400 dark:text-gray-950 dark:hover:bg-yellow-300">
               Log In
             </Link>
           )}
@@ -115,7 +115,7 @@ const Navbar: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsMobileMenuOpen(prev => !prev)}
-            className="md:hidden text-gray-800 dark:text-gray-200 focus:outline-none p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
+            className="md:hidden text-gray-950 dark:text-gray-200 focus:outline-none p-2 rounded-md hover:bg-yellow-300/70 dark:hover:bg-gray-800"
             aria-label="Toggle mobile menu"
           >
             {isMobileMenuOpen ? (
@@ -132,7 +132,7 @@ const Navbar: React.FC = () => {
       </div>
 
       {isMobileMenuOpen && (
-        <div className="md:hidden bg-white dark:bg-gray-900 py-3 px-4 border-t border-gray-200 dark:border-gray-700">
+        <div className="md:hidden bg-yellow-50 dark:bg-gray-900 py-3 px-4 border-t border-yellow-500/40 dark:border-gray-700">
           <Link to="/browse" className="block py-2 px-3 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800" onClick={closeMenus}>Browse</Link>
           <Link to="/submit" className="block py-2 px-3 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800" onClick={closeMenus}>Submit</Link>
           <Link to="/how-it-works" className="block py-2 px-3 rounded-md text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800" onClick={closeMenus}>How it Works</Link>
@@ -141,7 +141,7 @@ const Navbar: React.FC = () => {
               {isAdmin ? 'Manage Ideas' : 'My Ideas'}
             </Link>
           ) : (
-            <Link to="/login" className="block w-full mt-3 bg-yellow-400 hover:bg-yellow-500 text-white font-semibold py-3 px-4 rounded-md text-center transition-colors" onClick={closeMenus}>
+            <Link to="/login" className="block w-full mt-3 bg-gray-950 hover:bg-gray-800 text-white font-semibold py-3 px-4 rounded-md text-center transition-colors dark:bg-yellow-400 dark:text-gray-950 dark:hover:bg-yellow-300" onClick={closeMenus}>
               Log In
             </Link>
           )}
