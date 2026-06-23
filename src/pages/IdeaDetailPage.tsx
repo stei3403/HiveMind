@@ -26,6 +26,8 @@ const parseLinks = (links?: string) =>
 const getLinkHref = (link: string) =>
   /^https?:\/\//i.test(link) ? link : `https://${link}`;
 
+const placeholderImage = '/No Image Available Placeholder.png';
+
 type SectionProps = {
   title: string;
   children: React.ReactNode;
@@ -47,6 +49,7 @@ const IdeaDetailPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [userVote, setUserVoteState] = useState<VoteValue>(0);
   const [voting, setVoting] = useState(false);
+  const [viewerImage, setViewerImage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchIdea = async () => {
@@ -87,6 +90,24 @@ const IdeaDetailPage: React.FC = () => {
     fetchVote();
   }, [id, user]);
 
+  useEffect(() => {
+    if (!viewerImage) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setViewerImage(null);
+      }
+    };
+
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [viewerImage]);
+
   const handleVote = async (vote: VoteValue) => {
     if (!id || !user) {
       toast.error('Please log in before voting.');
@@ -120,18 +141,26 @@ const IdeaDetailPage: React.FC = () => {
   const score = getIdeaScore(idea);
   const status = idea.status || 'Just an Idea';
   const links = parseLinks(idea.links);
+  const featureImage = idea.featureImage || placeholderImage;
 
   return (
     <main className="max-w-5xl mx-auto px-4 py-8 text-gray-800 dark:text-white">
-      <img
-        src={idea.featureImage || '/No Image Available Placeholder.png'}
-        alt=""
-        className="w-full h-72 object-cover rounded-md mb-6 border border-gray-200 dark:border-gray-700"
-        onError={(event) => {
-          event.currentTarget.onerror = null;
-          event.currentTarget.src = '/No Image Available Placeholder.png';
-        }}
-      />
+      <button
+        type="button"
+        onClick={() => setViewerImage(featureImage)}
+        className="group block w-full cursor-zoom-in text-left"
+        aria-label="Open feature image full screen"
+      >
+        <img
+          src={featureImage}
+          alt=""
+          className="w-full h-72 object-cover rounded-md mb-6 border border-gray-200 dark:border-gray-700 transition group-hover:opacity-95"
+          onError={(event) => {
+            event.currentTarget.onerror = null;
+            event.currentTarget.src = placeholderImage;
+          }}
+        />
+      </button>
 
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between mb-6">
         <div className="min-w-0">
@@ -279,21 +308,56 @@ const IdeaDetailPage: React.FC = () => {
           <DetailSection title="Gallery">
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {idea.images?.slice(1).map((url: string, idx: number) => (
-                <img
+                <button
                   key={url}
-                  src={url}
-                  alt={`Idea gallery ${idx + 1}`}
-                  className="w-full h-32 object-cover rounded-md border border-gray-200 dark:border-gray-700"
-                  onError={(event) => {
-                    event.currentTarget.onerror = null;
-                    event.currentTarget.src = '/No Image Available Placeholder.png';
-                  }}
-                />
+                  type="button"
+                  onClick={() => setViewerImage(url)}
+                  className="group cursor-zoom-in"
+                  aria-label={`Open gallery image ${idx + 1} full screen`}
+                >
+                  <img
+                    src={url}
+                    alt={`Idea gallery ${idx + 1}`}
+                    className="w-full h-32 object-cover rounded-md border border-gray-200 dark:border-gray-700 transition group-hover:opacity-90"
+                    onError={(event) => {
+                      event.currentTarget.onerror = null;
+                      event.currentTarget.src = placeholderImage;
+                    }}
+                  />
+                </button>
               ))}
             </div>
           </DetailSection>
         )}
       </div>
+
+      {viewerImage && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Full screen image preview"
+          onClick={() => setViewerImage(null)}
+        >
+          <button
+            type="button"
+            onClick={() => setViewerImage(null)}
+            className="absolute right-4 top-4 rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/20"
+          >
+            Close
+          </button>
+          <img
+            src={viewerImage}
+            alt=""
+            className="max-h-[88vh] max-w-[92vw] rounded-md object-contain"
+            onClick={event => event.stopPropagation()}
+            onError={(event) => {
+              event.currentTarget.onerror = null;
+              event.currentTarget.src = placeholderImage;
+            }}
+          />
+        </div>
+      )}
     </main>
   );
 };
