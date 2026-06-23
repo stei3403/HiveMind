@@ -159,37 +159,65 @@ const LandingPage: React.FC = () => {
         {/* How HiveMind Works Section */}
         <section className="py-20 bg-white dark:bg-gray-800">
           <div className="container mx-auto px-4">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-gray-100 text-center mb-4 font-playfair-display">
-              How HiveMind Works
-            </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-300 text-center max-w-xl mx-auto mb-12">
-              Join a community where ideas evolve through collaboration
-            </p>
-            <div className="grid md:grid-cols-3 gap-x-8 gap-y-12">
-              <div className="text-center">
-                <div className="relative mb-6 inline-block">
-                  <img src="/share.png" alt="Share your idea" className="w-40 h-40 object-cover rounded-lg bg-yellow-100 dark:bg-yellow-800/50 mx-auto"/>
-                  <div className="absolute -top-3 -right-3 bg-yellow-400 text-gray-800 w-10 h-10 rounded-full flex items-center justify-center text-xl font-bold">1</div>
+            <div className="mx-auto mb-12 max-w-3xl text-center">
+              <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-yellow-600 dark:text-yellow-300">
+                The collaboration loop
+              </p>
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-gray-100 font-playfair-display">
+                How Ideas Move Through The Hive
+              </h2>
+              <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
+                HiveMind turns loose thoughts into public briefs the community can discover, react to, improve, and carry forward.
+              </p>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-4">
+              {[
+                {
+                  title: 'Share The Spark',
+                  text: 'Capture the rough thought, problem, and possible solution before it disappears into notes.',
+                },
+                {
+                  title: 'Shape A Brief',
+                  text: 'Add audience, business model, tags, links, images, and status so others understand the opportunity quickly.',
+                },
+                {
+                  title: 'Invite Signals',
+                  text: 'Votes, scores, tags, and discussion-ready pages help promising ideas rise above the noise.',
+                },
+                {
+                  title: 'Find Builders',
+                  text: 'A collaborator can discover an idea, sharpen it, prototype it, partner on it, or run with it.',
+                },
+              ].map((step, index) => (
+                <div
+                  key={step.title}
+                  className="rounded-md border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900"
+                >
+                  <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-full bg-yellow-400 text-lg font-bold text-gray-900">
+                    {index + 1}
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-100">{step.title}</h3>
+                  <p className="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-300">{step.text}</p>
                 </div>
-                <h3 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-2">Share Your Idea</h3>
-                <p className="text-gray-600 dark:text-gray-300">Submit your unused ideas, half-baked concepts, or ambitious projects that need a team.</p>
+              ))}
+            </div>
+
+            <div className="mt-10 grid gap-6 rounded-md border border-yellow-200 bg-yellow-50 p-6 md:grid-cols-[1fr_auto] md:items-center dark:border-yellow-700/60 dark:bg-yellow-900/20">
+              <div>
+                <h3 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+                  The goal is not just storage. It is momentum.
+                </h3>
+                <p className="mt-2 text-gray-700 dark:text-gray-300">
+                  Share ideas you may never build, improve the ones you understand, and help the best opportunities find the right people.
+                </p>
               </div>
-              <div className="text-center">
-                 <div className="relative mb-6 inline-block">
-                  <img src="/discover.png" alt="Find collaborators" className="w-40 h-40 object-cover rounded-lg bg-yellow-100 dark:bg-yellow-800/50 mx-auto"/>
-                  <div className="absolute -top-3 -right-3 bg-yellow-400 text-gray-800 w-10 h-10 rounded-full flex items-center justify-center text-xl font-bold">2</div>
-                </div>
-                <h3 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-2">Find Collaborators</h3>
-                <p className="text-gray-600 dark:text-gray-300">Connect with developers, designers, and experts who are excited about your vision.</p>
-              </div>
-              <div className="text-center">
-                 <div className="relative mb-6 inline-block">
-                  <img src="/build.png" alt="Build together" className="w-40 h-40 object-cover rounded-lg bg-yellow-100 dark:bg-yellow-800/50 mx-auto"/>
-                  <div className="absolute -top-3 -right-3 bg-yellow-400 text-gray-800 w-10 h-10 rounded-full flex items-center justify-center text-xl font-bold">3</div>
-                </div>
-                <h3 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-2">Build Together</h3>
-                <p className="text-gray-600 dark:text-gray-300">Transform ideas into reality with community support, feedback, and shared resources.</p>
-              </div>
+              <Link
+                to="/how-it-works"
+                className="inline-flex justify-center rounded-md bg-gray-900 px-5 py-3 font-semibold text-white transition hover:bg-gray-700 dark:bg-yellow-400 dark:text-gray-900 dark:hover:bg-yellow-300"
+              >
+                See How It Works
+              </Link>
             </div>
           </div>
         </section>
