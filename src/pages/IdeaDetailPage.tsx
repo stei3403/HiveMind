@@ -4,16 +4,9 @@ import { doc, getDoc } from 'firebase/firestore';
 import toast from 'react-hot-toast';
 import { db } from '../firebase';
 import { useAuth } from '../context/AuthContext';
-import { IdeaRecord, IdeaStatus } from '../types/formTypes';
+import { IdeaRecord } from '../types/formTypes';
 import { getIdeaScore, getUserVote, setUserVote, VoteValue } from '../services/votes';
-
-const statusClasses: Record<IdeaStatus, string> = {
-  'Just an Idea': 'bg-gray-100 text-gray-800 border-gray-200 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700',
-  'Researching': 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-950 dark:text-blue-200 dark:border-blue-900',
-  'Currently Building': 'bg-yellow-100 text-yellow-900 border-yellow-200 dark:bg-yellow-950 dark:text-yellow-200 dark:border-yellow-900',
-  'Built and Launched': 'bg-green-100 text-green-800 border-green-200 dark:bg-green-950 dark:text-green-200 dark:border-green-900',
-  'Iterating and Improving': 'bg-purple-100 text-purple-800 border-purple-200 dark:bg-purple-950 dark:text-purple-200 dark:border-purple-900',
-};
+import { getStatusClass, statusChipClass } from '../utils/ideaStatus';
 
 const chipClass = 'inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold';
 
@@ -166,7 +159,7 @@ const IdeaDetailPage: React.FC = () => {
         <div className="min-w-0">
           <h1 className="text-3xl md:text-4xl font-bold leading-tight">{idea.title}</h1>
           <div className="mt-4 flex flex-wrap gap-2">
-            <span className={`${chipClass} ${statusClasses[status]}`}>
+            <span className={`${statusChipClass} ${getStatusClass(status)}`}>
               {status}
             </span>
             {(idea.tags || []).map(tag => (

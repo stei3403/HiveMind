@@ -1,4 +1,5 @@
 import React from 'react';
+import { getStatusClass, statusChipClass } from '../utils/ideaStatus';
 
 type IdeaCardProps = {
   title: string;
@@ -56,7 +57,7 @@ const IdeaCard = ({
           <span className="text-gray-400">/</span>
           <span>{upvotes} up</span>
           <span>{downvotes} down</span>
-          <span className="px-2 py-0.5 rounded-full bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200">
+          <span className={`${statusChipClass} ${getStatusClass(status)}`}>
             {status}
           </span>
         </div>
