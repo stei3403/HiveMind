@@ -1,12 +1,14 @@
 
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase';
+import { useAuth } from '../context/AuthContext';
 import { IdeaRecord } from '../types/formTypes';
 
 const IdeaDetailPage: React.FC = () => {
   const { id } = useParams();
+  const { user, isAdmin } = useAuth();
   const [idea, setIdea] = useState<IdeaRecord | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -32,6 +34,7 @@ const IdeaDetailPage: React.FC = () => {
 
   if (loading) return <div className="text-center p-6">Loading...</div>;
   if (!idea) return <div className="text-center p-6 text-red-600">Idea not found.</div>;
+  const canEdit = !!user && (isAdmin || idea.authorUid === user.uid);
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8 text-gray-800 dark:text-white">
@@ -45,7 +48,17 @@ const IdeaDetailPage: React.FC = () => {
         }}
       />
 
-      <h1 className="text-3xl font-bold mb-2">{idea.title}</h1>
+      <div className="flex items-start justify-between gap-4 mb-2">
+        <h1 className="text-3xl font-bold">{idea.title}</h1>
+        {canEdit && id && (
+          <Link
+            to={`/idea/${id}/edit`}
+            className="px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-white font-semibold rounded-md text-sm"
+          >
+            Edit
+          </Link>
+        )}
+      </div>
       <div className="text-sm text-gray-500 dark:text-gray-400 mb-4">{idea.status}</div>
 
       <div className="mb-4">
